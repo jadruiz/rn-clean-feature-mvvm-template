@@ -1,6 +1,6 @@
 # React Native Clean Feature MVVM Architecture Template
 
-Este repositorio provee un template base para desarrollar aplicaciones en React Native, integrando **Feature-Based Architecture**, **Clean Architecture** y el patrón **MVVM**. Está diseñado para el bare workflow y viene preparado con soporte para internacionalización, accesibilidad, logging, telemetría y pruebas automatizadas.
+Este repositorio proporciona una plantilla base para desarrollar aplicaciones en React Native, combinando **Feature-Based Architecture**, **Clean Architecture** y el patrón **MVVM**. Diseñado para el bare workflow, incluye soporte para internacionalización, accesibilidad, logging, telemetría y pruebas automatizadas.
 
 ---
 
@@ -12,12 +12,12 @@ Este repositorio provee un template base para desarrollar aplicaciones en React 
   - [Clean Architecture](#clean-architecture)
   - [MVVM (Model-View-ViewModel)](#mvvm-model-view-viewmodel)
 - [Principios Claves](#principios-claves)
-- [Interacción entre Capas y Patrones de Diseño](#interacción-entre-capas-y-patrones-de-diseño)
-  - [1. Capa de Dominio](#1-capa-de-dominio)
-  - [2. Capa de Infraestructura](#2-capa-de-infraestructura)
-  - [3. Capa de Presentación](#3-capa-de-presentación)
-  - [4. Capa Central](#4-capa-central)
-- [Gestión de Seguridad, Logs, Middlewares y Configuraciones](#gestión-de-seguridad-logs-middlewares-y-configuraciones)
+- [Capas y Patrones de Diseño](#capas-y-patrones-de-diseño)
+  - [Capa de Dominio](#capa-de-dominio)
+  - [Capa de Infraestructura](#capa-de-infraestructura)
+  - [Capa de Presentación](#capa-de-presentación)
+  - [Capa Central](#capa-central)
+- [Seguridad, Logs, Middleware y Configuración](#seguridad-logs-middleware-y-configuración)
 - [Estructura de Directorios](#estructura-de-directorios)
 - [Uso](#uso)
 - [Contribuciones](#contribuciones)
@@ -27,118 +27,96 @@ Este repositorio provee un template base para desarrollar aplicaciones en React 
 
 ## 👀 Visión General
 
-Este template está orientado a:
-- Mantener un **código ordenado, escalable y mantenible**.
-- Aplicar las mejores prácticas de ingeniería de software.
-- Proveer una estructura modular que facilite el desarrollo y la integración de nuevas funcionalidades.
-- Servir como punto de partida para proyectos React Native (bare workflow).
+Este template está diseñado para:
+- Garantizar un **código limpio, modular y escalable**.
+- Aplicar las mejores prácticas de desarrollo.
+- Proporcionar una estructura organizada que facilite la integración de nuevas funcionalidades.
+- Servir como punto de partida para proyectos en React Native (bare workflow).
 
 ---
 
 ## 🏗 Arquitectura del Proyecto
 
 ### Feature-Based Architecture
-Agrupa todo lo relacionado con una funcionalidad (por ejemplo, *auth*, *levels*, *settings*) en un solo módulo, facilitando la modularidad y el mantenimiento.
+Organiza el código por funcionalidades, agrupando lógica de negocio, UI y servicios relacionados en módulos independientes (por ejemplo, *auth*, *levels*, *settings*). Esto mejora la modularidad y facilita el mantenimiento.
 
 ### Clean Architecture
-Separa la aplicación en capas bien definidas (dominio, infraestructura, presentación, core) para evitar dependencias circulares y promover la testabilidad y flexibilidad.
+Separa la aplicación en capas bien definidas (**dominio**, **infraestructura**, **presentación**, **core**) para reducir acoplamientos innecesarios, mejorar la testabilidad y facilitar la escalabilidad.
 
 ### MVVM (Model-View-ViewModel)
-Dentro de la capa de presentación, se utiliza MVVM para separar la vista (UI) de la lógica de estado y eventos, manteniendo los componentes UI ligeros y fáciles de probar.
+Dentro de la capa de presentación, se utiliza MVVM para desacoplar la UI de la lógica de negocio y gestión del estado, lo que facilita pruebas y mantenimiento.
 
 ---
 
 ## 🔥 Principios Claves
 
-1. **Separación de responsabilidades:** Cada capa y módulo tiene una función específica.
-2. **Modularidad:** Facilita la integración de nuevas funcionalidades sin romper otras partes.
-3. **Escalabilidad:** La arquitectura permite que la aplicación crezca en complejidad y tamaño.
-4. **Reutilización de código:** Uso de patrones de diseño y componentes reutilizables para evitar duplicaciones.
-5. **Compatibilidad con React Native (Expo):** Se mantiene la convención de Expo, conservando los archivos principales en la raíz del proyecto.
+1. **Separación de responsabilidades:** Cada capa y módulo cumple una función específica.
+2. **Modularidad:** Facilita la extensión sin afectar otras partes del sistema.
+3. **Escalabilidad:** Soporta el crecimiento de la aplicación sin comprometer su rendimiento.
+4. **Reutilización de código:** Uso de patrones y componentes reutilizables para minimizar redundancias.
+5. **Compatibilidad con Expo:** Mantiene la convención de Expo sin perder la flexibilidad del bare workflow.
 
 ---
 
-## 🔄 Interacción entre Capas y Patrones de Diseño
+## 🔄 Capas y Patrones de Diseño
 
-### 1. Capa de Dominio (`src/domain/`)
-Define la **lógica de negocio** y es independiente de frameworks.
-
-- **Entidades** (`src/domain/entities/`):  
-  📄 Modelos de negocio (por ejemplo, `User`, `Level`).
-- **Casos de Uso** (`src/domain/useCases/`):  
-  📄 Acciones específicas de negocio (por ejemplo, `GetLevelsUseCase.js`).
+### Capa de Dominio (`src/domain/`)
+Contiene la lógica de negocio pura, independiente de frameworks.
+- **Entidades (`entities/`)**: Modelos de negocio (ej. `User`, `Level`).
+- **Casos de Uso (`useCases/`)**: Acciones específicas de negocio (ej. `GetLevelsUseCase.js`).
 
 *Patrones aplicados:* Use Case Pattern, Domain-Driven Design (DDD).
 
-### 2. Capa de Infraestructura (`src/infrastructure/`)
-Implementa la lógica técnica como acceso a bases de datos, APIs, seguridad, etc.
-
-- **Base de Datos** (`src/infrastructure/database/`):  
-  📄 Configuración, modelos persistentes, repositorios y schemas.
-- **Monitoreo** (`src/infrastructure/monitoring/`):  
-  📄 Gestión de logs, sincronización y detección de errores.
-- **Seguridad** (`src/infrastructure/security/`):  
-  📄 Autenticación, autorización y cifrado.
-- **Telemetría** (`src/infrastructure/telemetry/`):  
-  📄 Monitoreo de rendimiento y métricas.
+### Capa de Infraestructura (`src/infrastructure/`)
+Implementa la lógica técnica, como acceso a bases de datos, APIs y seguridad.
+- **Base de Datos (`database/`)**: Configuración y persistencia de datos.
+- **Monitoreo (`monitoring/`)**: Logs, sincronización y detección de errores.
+- **Seguridad (`security/`)**: Autenticación, autorización y cifrado.
+- **Telemetría (`telemetry/`)**: Monitoreo de rendimiento.
 
 *Patrones aplicados:* Repository Pattern, Proxy/Adapter.
 
-### 3. Capa de Presentación (`src/presentation/`)
-Encargada de la UI, navegación y gestión de estado.
-
-- **Features** (`src/presentation/features/`):  
-  📂 Módulos por funcionalidad (ej. *auth*, *levels*, *settings*).
-- **Pantallas** (`src/presentation/screens/`):  
-  📂 Vistas de la aplicación (ej. Home, Profile).
-- **Componentes** (`src/presentation/components/`):  
-  📄 Elementos UI reutilizables.
-- **Hooks** (`src/presentation/hooks/`):  
-  📄 Lógica reactiva y ViewModels (custom hooks).
-- **Middlewares** (`src/presentation/middlewares/`):  
-  📄 Interceptores para el flujo de acciones en la UI.
-- **Store** (`src/presentation/store/`):  
-  📄 Gestión global del estado (Redux, Context, etc.).
+### Capa de Presentación (`src/presentation/`)
+Gestiona la UI, navegación y estado.
+- **Features (`features/`)**: Módulos organizados por funcionalidad.
+- **Pantallas (`screens/`)**: Vistas principales de la app.
+- **Componentes (`components/`)**: Elementos UI reutilizables.
+- **Hooks (`hooks/`)**: Custom hooks para lógica reactiva.
+- **Middleware (`middlewares/`)**: Interceptores de acciones UI.
+- **Store (`store/`)**: Gestión global del estado (Redux, Context, etc.).
 
 *Patrones aplicados:* Model-View-Presenter (MVP), Observer Pattern.
 
-### 4. Capa Central (`src/core/`)
-Contiene configuraciones globales y utilidades transversales.
-
-- **Configuraciones** (`src/core/config/`):  
-  📄 Variables de entorno y setup de la aplicación.
-- **Adaptadores** (`src/core/adapters/`):  
-  📄 Integraciones con servicios externos.
-- **Logging** (`src/core/logging/`):  
-  📄 Sistema centralizado de logs y manejo de errores.
-- **Telemetría** (`src/core/telemetry/`):  
-  📄 Métricas y monitoreo global.
-- **Utilidades** (`src/core/utils/`):  
-  📄 Funciones helper y utilidades generales.
-- **Dependency Injection:**  
-  📄 `dependencyContainer.js` centraliza la inyección de dependencias.
+### Capa Central (`src/core/`)
+Contiene configuraciones globales y utilidades.
+- **Configuraciones (`config/`)**: Variables de entorno y setup.
+- **Adaptadores (`adapters/`)**: Integraciones con servicios externos.
+- **Logging (`logging/`)**: Sistema centralizado de logs.
+- **Telemetría (`telemetry/`)**: Métricas y monitoreo global.
+- **Utilidades (`utils/`)**: Funciones helper y helpers transversales.
+- **Dependency Injection (`dependencyContainer.js`)**: Centraliza la inyección de dependencias.
 
 ---
 
-## 🔒 Gestión de Seguridad, Logs, Middlewares y Configuraciones
+## 🔒 Seguridad, Logs, Middleware y Configuración
 
 ### Autenticación y Seguridad
-- **Secure Storage:** Almacena tokens y credenciales sensibles.
+- **Secure Storage:** Almacena credenciales de forma segura.
 - **Middleware de Autenticación:** Controla el acceso a recursos.
-- **Cifrado y Firmas Digitales:** Aseguran la integridad y confidencialidad de los datos.
+- **Cifrado y Firmas Digitales:** Protege la integridad de los datos.
 
-### Manejo de Logs y Errores
-- **Logger Centralizado:** Registra eventos, errores y excepciones.
+### Logs y Monitoreo
+- **Logger Centralizado:** Registra eventos y errores.
 - **Monitoreo de Estado:** Detecta fallos y genera alertas.
-- **Persistencia de Logs:** Almacena eventos relevantes para auditoría.
+- **Persistencia de Logs:** Facilita auditorías y seguimiento de eventos.
 
 ### Middleware y Telemetría
-- **Middleware de Eventos:** Captura acciones de usuario (clics, navegación, etc.).
-- **OpenTelemetry:** Integración para monitorear el rendimiento y la experiencia del usuario.
+- **Middleware de Eventos:** Captura interacciones del usuario.
+- **OpenTelemetry:** Permite el monitoreo del rendimiento y la UX.
 
-### Configuraciones Globales
-- **Variables de Entorno:** Facilitan la configuración por entorno (desarrollo, producción).
-- **Configuraciones Dinámicas:** Permiten activar/desactivar funcionalidades sin recompilar.
+### Configuración Global
+- **Variables de Entorno:** Configuración adaptable a distintos entornos.
+- **Flags de Características:** Permiten activar/desactivar funcionalidades sin recompilación.
 
 ---
 
@@ -146,18 +124,23 @@ Contiene configuraciones globales y utilidades transversales.
 
 ```bash
 📂 .
-├── 📂 android/                      # Proyecto nativo Android (generado automáticamente)
-├── 📂 ios/                          # Proyecto nativo iOS (generado automáticamente)
-├── 📂 assets/                       # Recursos estáticos (imágenes, fuentes, etc.)
-│   └── 📄 index.js                  # Archivo índice para incluir la carpeta en Git
+├── 📂 assets/                        # Recursos estáticos (imágenes, fuentes, etc.)
+│   ├── 📂 images/                    # Imágenes como PNG, JPG, SVG, GIF, etc.
+│   │   └── 📄 icon.svg               # Ejemplo de imagen SVG (dummy eliminar)
+│   ├── 📂 fonts/                     # Fuentes personalizadas o webfonts
+│   │   ├── 📄 main.ttf               # Ejemplo de fuente TTF (dummy eliminar)
+│   ├── 📂 styles/                    # Archivos CSS, SASS, LESS, o preprocesadores de CSS
+│   │   └── 📄 main.css               # Estilos generales del proyecto (dummy eliminar)
+│   ├── 📂 scripts/                   # Archivos JavaScript (funciones globales, etc.)
+│   │   └── 📄 main.js                # Funciones JS generales
 ├── 📂 src/                          # Código fuente principal
-│   ├── 📂 accessibility/            # Configuración y utilidades para mejorar la accesibilidad
+│   ├── 📂 accessibility/            # Configuración y utilidades para mejorar la accesibilidad (opcional)
 │   │   ├── 📄 AccessibilityProvider.js  # Componente Provider con reglas de accesibilidad global
 │   │   └── 📄 index.js              # Archivo índice
 │   ├── 📂 ai/                       # Módulos de inteligencia artificial (opcional)
 │   │   └── 📄 index.js              # Inicialización o servicios de IA
 │   ├── 📂 analytics/                # Telemetría y tracking de eventos
-│   │   └── 📄 index.js              # Configuración de tracking de eventos
+│   │   └── 📄 index.js              # Configuración de tracking de eventos (recomendado)
 │   ├── 📂 core/                     # Configuraciones y utilidades globales
 │   │   ├── 📂 config/               # Variables de entorno y configuraciones generales
 │   │   │   ├── 📄 AppConfig.js
@@ -168,13 +151,13 @@ Contiene configuraciones globales y utilidades transversales.
 │   │   │   └── 📄 DatabaseProxy.js
 │   │   ├── 📂 logging/              # Sistema centralizado de logs
 │   │   │   └── 📄 index.js
-│   │   ├── 📂 telemetry/            # Monitoreo de rendimiento y métricas globales
+│   │   ├── 📂 telemetry/            # Monitoreo de rendimiento y métricas globales (recomendado)
 │   │   │   └── 📄 index.js
 │   │   ├── 📂 utils/                # Funciones helper y utilidades generales
 │   │   │   └── 📄 index.js
 │   │   └── 📄 dependencyContainer.js# Inyección de dependencias para desacoplar módulos
 │   ├── 📂 docs/                     # Documentación técnica y de arquitectura
-│   │   └── 📄 README.md
+│   │   └── 📄 index.md
 │   ├── 📂 domain/                   # Lógica de negocio pura (dominio)
 │   │   ├── 📂 entities/             # Modelos de negocio (ej.: Level, Logs, User)
 │   │   │   ├── 📄 Level.js
@@ -182,16 +165,13 @@ Contiene configuraciones globales y utilidades transversales.
 │   │   │   ├── 📄 User.js
 │   │   │   └── 📄 index.js
 │   │   └── 📂 useCases/             # Casos de uso que encapsulan la lógica de negocio
-│   │       ├── 📄 GetLevelsUseCase.js
 │   │       ├── 📄 SaveLogUseCase.js
-│   │       ├── 📄 SyncLevelsUseCase.js
 │   │       └── 📄 index.js
 │   ├── 📂 infrastructure/           # Persistencia, APIs, seguridad, etc.
 │   │   ├── 📂 database/             # Configuración e inicialización de la base de datos
 │   │   │   ├── 📄 db.js
 │   │   │   ├── 📄 index.js
 │   │   │   ├── 📂 models/           # Modelos persistentes (ORM, esquemas, etc.)
-│   │   │   │   ├── 📄 Level.js
 │   │   │   │   ├── 📄 Logs.js
 │   │   │   │   ├── 📄 User.js
 │   │   │   │   └── 📄 index.js
@@ -200,16 +180,16 @@ Contiene configuraciones globales y utilidades transversales.
 │   │   │   │   ├── 📄 UserRepository.js
 │   │   │   │   └── 📄 index.js
 │   │   │   └── 📄 schema.js         # Definición de esquemas (si aplica)
-│   │   ├── 📂 monitoring/           # Gestión y sincronización de estados
+│   │   ├── 📂 monitoring/           # Gestión y sincronización de estados (recomendado)
 │   │   │   └── 📄 SyncStateManager.js
 │   │   ├── 📂 security/             # Autenticación, autorización y cifrado
 │   │   │   └── 📂 repositories/
 │   │   │       └── 📄 secureStorage.js
-│   │   ├── 📂 telemetry/            # Telemetría específica para infraestructura
+│   │   ├── 📂 telemetry/            # Telemetría específica para infraestructura (recomendado)
 │   │   │   └── 📄 DatabaseTelemetry.js
 │   │   └── 📂 utils/                # Utilidades para infraestructura
 │   │       └── 📄 index.js
-│   ├── 📂 i18n/                     # Configuración de internacionalización
+│   ├── 📂 i18n/                     # Configuración de internacionalización(opcional)
 │   │   ├── 📄 en.json               # Traducciones en inglés
 │   │   ├── 📄 es.json               # Traducciones en español
 │   │   └── 📄 index.js              # Configuración de i18n (ej. i18next)
@@ -242,22 +222,152 @@ Contiene configuraciones globales y utilidades transversales.
 │   │   │   └── 📄 index.js
 │   │   └── 📂 middlewares/          # Middlewares para el flujo de la UI
 │   │       └── 📄 index.js
-│   ├── 📂 shared/                   # Elementos reutilizables en varias capas
-│   │   ├── 📂 components/           # Componentes UI compartidos (botones, modals, etc.)
-│   │   ├── 📂 hooks/                # Hooks compartidos
-│   │   ├── 📂 middlewares/          # Middlewares reutilizables
-│   │   ├── 📂 themes/               # Temas y estilos globales, con pautas de accesibilidad
-│   │   ├── 📂 utils/                # Utilidades transversales
-│   │   └── 📂 validators/           # Validadores de formularios o datos
+├── 📂 shared/                   # Elementos reutilizables en varias capas
+│   ├── 📂 components/           # Componentes UI compartidos (botones, modals, etc.)
+│   │   └── 📄 Button.js         # Ejemplo de componente compartido (Button)
+│   ├── 📂 hooks/                # Hooks compartidos
+│   │   └── 📄 useCustomHook.js  # Ejemplo de hook compartido
+│   ├── 📂 middlewares/          # Middlewares reutilizables
+│   │   └── 📄 authMiddleware.js # Ejemplo de middleware de autenticación
+│   ├── 📂 themes/               # Temas y estilos globales, con pautas de accesibilidad
+│   │   └── 📄 lightTheme.js     # Ejemplo de tema claro
+│   ├── 📂 utils/                # Utilidades transversales
+│   │   └── 📄 formatDate.js     # Ejemplo de utilidad para formatear fechas
+│   └── 📂 validators/           # Validadores de formularios o datos
+│       └── 📄 emailValidator.js # Ejemplo de validador de emails
 │   └── 📂 tests/                    # Pruebas automatizadas (unitarias, integración, e2e)
 │       ├── 📂 e2e/                 # Pruebas end-to-end
+│       │   └── 📄 example.e2e.js    # Ejemplo de prueba end-to-end
 │       ├── 📂 integration/         # Pruebas de integración
+│       │   └── 📄 example.integration.js # Ejemplo de prueba de integración
 │       └── 📂 unit/                # Pruebas unitarias
+│           └── 📄 example.unit.js   # Ejemplo de prueba unitaria
 ├── 📄 .gitignore
-├── 📄 App.js                        # Punto de entrada principal de Expo
-├── 📄 app.json                      # Configuración de la app (Expo)
-├── 📄 babel.config.js
-├── 📄 env.example                   # Ejemplo de variables de entorno
-├── 📄 index.js
-├── 📄 package.json
+├── 📄 env.example                   # Ejemplo de variables de 
 └── 📄 README.md
+```
+
+---
+## 🚀 Uso
+
+Tienes dos opciones para usar este template:
+
+### Opción 1: Clonando el repositorio
+
+1. Clona el repositorio y elimina la carpeta `.git` para desvincularlo del origen:
+   ```bash
+   git clone https://github.com/jadruiz/rn-clean-feature-mvvm-template.git
+   cd rn-clean-feature-mvvm-template
+   rm -rf .git
+   ```
+2. Inicializa un nuevo repositorio si lo deseas:
+   ```bash
+   git init
+   git add .
+   git commit -m "Inicializando proyecto con el template"
+   ```
+3. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+4. Ejecuta el proyecto:
+   ```bash
+   npx react-native run-android  # Para Android
+   npx react-native run-ios      # Para iOS
+   ```
+
+### Opción 2: Usando `degit`
+
+1. Usa `degit` para copiar el repositorio sin historial de Git:
+   ```bash
+   npx degit jadruiz/rn-clean-feature-mvvm-template mi-nuevo-proyecto
+   cd mi-nuevo-proyecto
+   ```
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+3. Ejecuta el proyecto:
+   ```bash
+   npx react-native run-android  # Para Android
+   npx react-native run-ios      # Para iOS
+   ```
+
+---
+
+## 🤝 Contribuciones
+
+## 1️⃣ Ramas principales  
+Estas son las ramas centrales del proyecto:  
+
+- **`main`** (o `master`): Rama estable y lista para producción. Solo se fusionan (`merge`) cambios bien probados.  
+- **`develop`**: Rama de integración donde se combinan nuevas funcionalidades antes de ir a producción.  
+
+## 2️⃣ Ramas de trabajo  
+Para mantener el código organizado, usa ramas específicas para distintas tareas:  
+
+- **`feature/nombre-feature`**: Para nuevas funcionalidades (ej. `feature/menu-deslizante`).  
+- **`bugfix/nombre-bug`**: Para corregir errores identificados en desarrollo.  
+- **`hotfix/nombre-hotfix`**: Para solucionar errores críticos en producción.  
+
+## 3️⃣ Ramas específicas 
+
+- **`release/nombre-version`**: Para preparar versiones antes de subirlas a la tienda (`release/1.0.0`).  
+- **`build/android` y `build/ios`** *(opcional)*: Si manejas compilaciones específicas para cada plataforma.  
+
+## 🔄 Flujo de trabajo recomendado  
+1. **Crear una rama `feature/nueva-feature` desde `develop`**  
+2. **Desarrollar y probar la funcionalidad**  
+3. **Merge a `develop` con PR (Pull Request)**  
+4. **Cuando se junten varias features en `develop`, crear una `release/x.x.x`**  
+5. **Testear y fusionar `release/x.x.x` en `main` cuando esté lista**  
+6. **Si hay un bug en producción, usar `hotfix/nombre-hotfix` desde `main`**  
+
+Este flujo ayuda a mantener el proyecto limpio, organizado y listo para producción. 🚀🔥 
+
+## Convenciones de Commits en Git
+
+### Formato de los Mensajes
+Los mensajes de commit deben seguir el siguiente formato:
+
+```plaintext
+<tipo>(<área opcional>): <mensaje breve>
+
+[Descripción opcional en detalle]
+
+[Referencias a issues o tickets]
+```
+
+### Tipos de Commits
+| Tipo     | Descripción |
+|----------|------------|
+| `feat`   | Agregar una nueva funcionalidad |
+| `fix`    | Corregir un error |
+| `docs`   | Cambios en la documentación |
+| `style`  | Cambios de formato o estilo (sin afectar el código) |
+| `refactor` | Reestructuración del código sin cambios funcionales |
+| `perf`   | Mejoras en el rendimiento |
+| `test`   | Agregar o modificar pruebas |
+| `chore`  | Tareas de mantenimiento sin afectar la lógica del código |
+| `build`  | Cambios en la configuración de compilación o dependencias |
+| `ci`     | Cambios en configuración de integración continua |
+
+### Ejemplos de Commits
+```plaintext
+feat(menu): implementar menú deslizante básico
+
+fix(auth): corregir error de autenticación en login
+
+docs(readme): actualizar guía de instalación
+```
+
+### Buenas Prácticas
+- Usa un mensaje claro y conciso.
+- Escribe en infinitivo y en inglés si el equipo lo requiere.
+- Relaciona los commits con tickets de trabajo si es necesario.
+- Evita commits genéricos como `fix bug` o `update code`.
+
+---
+
+## 📜 Licencia
+Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
