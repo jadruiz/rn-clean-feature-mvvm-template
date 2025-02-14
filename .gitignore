@@ -1,0 +1,137 @@
+# Dependencias y archivos de instalación
+node_modules/
+.pnpm-store/
+.pnp/
+.pnp.js
+package-lock.json
+yarn.lock
+
+# Expo & React Native (Bare Flow)
+.expo/
+.expo-shared/
+dist/
+web-build/
+*.expo/
+*.expo-shared/
+
+# Archivos de Build y Caché
+/build/
+.gradle/
+.idea/
+.vscode/
+logs/
+*.log
+*.gz
+*.bz2
+*.tar
+*.zip
+*.rar
+*.7z
+.history/
+
+# Configuración de Metro Bundler
+.metro/
+.metro-health-check*
+
+# Archivos Temporales y de Debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.tsbuildinfo
+*.pid
+*.pid.lock
+*.tgz
+*.swp
+*.swo
+*.swn
+
+# Archivos de configuración y variables de entorno
+.env
+.env*.local
+.env*.development
+.env*.staging
+.env*.production
+
+# Archivos Sensibles (Claves y Certificados)
+*.pem
+*.cert
+*.key
+*.csr
+*.crt
+*.pfx
+*.p12
+*.jks
+*.keystore
+*.p8
+*.mobileprovision
+google-services.json
+app/google-services.json
+app/App_Resources/Android/google-services.json
+app/App_Resources/iOS/GoogleService-Info.plist
+fastlane/.env
+fastlane/report.xml
+
+# Archivos específicos de macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+*.lock
+*.xcuserstate
+
+# Archivos específicos de Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Archivos específicos de Linux
+.npm/
+.npmrc
+.cache/
+.trash/
+lost+found/
+
+# Archivos específicos de Android (Gradle & Keystore)
+*.apk
+*.aab
+*.so
+*.iml
+*.dex
+.cxx/
+.externalNativeBuild/
+captures/
+outputs/
+*.log
+*.keystore
+
+# Archivos específicos de iOS (Xcode)
+ios/Pods/
+ios/.symlinks/
+ios/build/
+ios/DerivedData/
+xcuserdata/
+xcshareddata/
+*.xcworkspace
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+
+# Archivos de Configuración de IDEs y Editores de Código
+.vscode/
+.idea/
+*.iml
+
+# Otros Archivos de Caché y Configuración
+*.cache
+.cache/
+*.eslintcache
+.next/
+out/
+coverage/
+jest/
+cypress/videos/
+cypress/screenshots/
+
+# React Native Debugger
+.react-native-debugger/
