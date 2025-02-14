@@ -124,126 +124,128 @@ Contiene configuraciones globales y utilidades.
 
 ```bash
 📂 .
-├── 📂 assets/                        # Recursos estáticos (imágenes, fuentes, etc.)
-│   ├── 📂 images/                    # Imágenes como PNG, JPG, SVG, GIF, etc.
-│   │   └── 📄 icon.svg               # Ejemplo de imagen SVG (dummy eliminar)
-│   ├── 📂 fonts/                     # Fuentes personalizadas o webfonts
-│   │   ├── 📄 main.ttf               # Ejemplo de fuente TTF (dummy eliminar)
-│   ├── 📂 styles/                    # Archivos CSS, SASS, LESS, o preprocesadores de CSS
-│   │   └── 📄 main.css               # Estilos generales del proyecto (dummy eliminar)
-│   ├── 📂 scripts/                   # Archivos JavaScript (funciones globales, etc.)
-│   │   └── 📄 main.js                # Funciones JS generales
-├── 📂 src/                          # Código fuente principal
-│   ├── 📂 accessibility/            # Configuración y utilidades para mejorar la accesibilidad (opcional)
-│   │   ├── 📄 AccessibilityProvider.js  # Componente Provider con reglas de accesibilidad global
-│   │   └── 📄 index.js              # Archivo índice
-│   ├── 📂 ai/                       # Módulos de inteligencia artificial (opcional)
-│   │   └── 📄 index.js              # Inicialización o servicios de IA
-│   ├── 📂 analytics/                # Telemetría y tracking de eventos
-│   │   └── 📄 index.js              # Configuración de tracking de eventos (recomendado)
-│   ├── 📂 core/                     # Configuraciones y utilidades globales
-│   │   ├── 📂 config/               # Variables de entorno y configuraciones generales
+├── 📂 assets/                           # Recursos estáticos
+│   ├── 📂 fonts/                        # Fuentes personalizadas
+│   │   └── 📄 main.ttf
+│   ├── 📂 images/                       # Imágenes, íconos y SVGs
+│   │   └── 📄 logo.png
+│   ├── 📂 scripts/                      # Scripts JS globales (si aplica)
+│   │   └── 📄 main.js
+│   └── 📂 styles/                       # Estilos globales (CSS, SASS, etc.)
+│       └── 📄 main.css
+├── 📂 docs/                             # Documentación técnica y de arquitectura
+│   └── 📄 index.md                      # Documentación principal
+├── 📂 src/                              # Código fuente principal
+│   ├── 📂 core/                         # Configuraciones y utilidades globales
+│   │   ├── 📂 config/                   # Configuración, variables de entorno y constantes
 │   │   │   ├── 📄 AppConfig.js
 │   │   │   ├── 📄 ConfigAdapter.js
-│   │   │   ├── 📄 ConfigFactory.js
-│   │   │   └── 📄 index.js          # Archivo índice para la carpeta config
-│   │   ├── 📂 adapters/             # Adaptadores para servicios externos
-│   │   │   └── 📄 DatabaseProxy.js
-│   │   ├── 📂 logging/              # Sistema centralizado de logs
 │   │   │   └── 📄 index.js
-│   │   ├── 📂 telemetry/            # Monitoreo de rendimiento y métricas globales (recomendado)
-│   │   │   └── 📄 index.js
-│   │   ├── 📂 utils/                # Funciones helper y utilidades generales
-│   │   │   └── 📄 index.js
-│   │   └── 📄 dependencyContainer.js# Inyección de dependencias para desacoplar módulos
-│   ├── 📂 docs/                     # Documentación técnica y de arquitectura
-│   │   └── 📄 index.md
-│   ├── 📂 domain/                   # Lógica de negocio pura (dominio)
-│   │   ├── 📂 entities/             # Modelos de negocio (ej.: Level, Logs, User)
-│   │   │   ├── 📄 Level.js
-│   │   │   ├── 📄 Logs.js
+│   │   ├── 📂 adapters/                 # Adaptadores para servicios externos
+│   │   │   ├── 📄 HttpAdapter.js        # Consumo de APIs
+│   │   │   ├── 📄 DatabaseAdapter.js    # Abstracción de conexión a BD
+│   │   │   📄 BaseAdapter.js         # Clase base para adaptadores
+│   │   ├── 📂 di/                       # Dependency Injection container
+│   │   │   └── 📄 dependencyContainer.js
+│   │   ├── 📂 interfaces/               # Contratos e interfaces comunes
+│   │   │   ├── 📄 ILogger.js            # Interfaz para logging
+│   │   │   └── 📄 IRepository.js        # Interfaz base para repositorios
+│   │   ├── 📂 logging/                  # Sistema centralizado de logs
+│   │   │   └── 📄 Logger.js
+│   │   ├── 📂 middleware/               # Middlewares globales (para peticiones, etc.)
+│   │   │   └── 📄 GlobalMiddleware.js
+│   │   ├── 📂 navigation/               # Configuración global de navegación
+│   │   │   └── 📄 AppNavigator.js
+│   │   ├── 📂 utils/                    # Funciones helper y utilidades comunes
+│   │   │   └── 📄 helper.js
+│   │   ├── 📂 constants/                # Constantes globales, endpoints, etc.
+│   │   └── 📂 errors/                   # Manejo centralizado de errores y excepciones
+│   ├── 📂 domain/                       # Lógica de negocio pura (sin dependencias de frameworks)
+│   │   ├── 📂 entities/                 # Entidades y modelos de dominio
 │   │   │   ├── 📄 User.js
+│   │   │   ├── 📄 Level.js
 │   │   │   └── 📄 index.js
-│   │   └── 📂 useCases/             # Casos de uso que encapsulan la lógica de negocio
-│   │       ├── 📄 SaveLogUseCase.js
-│   │       └── 📄 index.js
-│   ├── 📂 infrastructure/           # Persistencia, APIs, seguridad, etc.
-│   │   ├── 📂 database/             # Configuración e inicialización de la base de datos
-│   │   │   ├── 📄 db.js
-│   │   │   ├── 📄 index.js
-│   │   │   ├── 📂 models/           # Modelos persistentes (ORM, esquemas, etc.)
-│   │   │   │   ├── 📄 Logs.js
-│   │   │   │   ├── 📄 User.js
-│   │   │   │   └── 📄 index.js
-│   │   │   ├── 📂 repositories/     # Repositorios para abstraer el acceso a datos
-│   │   │   │   ├── 📄 LogsRepository.js
-│   │   │   │   ├── 📄 UserRepository.js
-│   │   │   │   └── 📄 index.js
-│   │   │   └── 📄 schema.js         # Definición de esquemas (si aplica)
-│   │   ├── 📂 monitoring/           # Gestión y sincronización de estados (recomendado)
-│   │   │   └── 📄 SyncStateManager.js
-│   │   ├── 📂 security/             # Autenticación, autorización y cifrado
-│   │   │   └── 📂 repositories/
-│   │   │       └── 📄 secureStorage.js
-│   │   ├── 📂 telemetry/            # Telemetría específica para infraestructura (recomendado)
-│   │   │   └── 📄 DatabaseTelemetry.js
-│   │   └── 📂 utils/                # Utilidades para infraestructura
-│   │       └── 📄 index.js
-│   ├── 📂 i18n/                     # Configuración de internacionalización(opcional)
-│   │   ├── 📄 en.json               # Traducciones en inglés
-│   │   ├── 📄 es.json               # Traducciones en español
-│   │   └── 📄 index.js              # Configuración de i18n (ej. i18next)
-│   ├── 📂 presentation/             # Capa de presentación: UI, navegación y gestión de estado
-│   │   ├── 📂 store/                # Gestión de estado global (Redux, Context, etc.)
-│   │   │   └── 📄 index.js
-│   │   ├── 📂 features/             # Funcionalidades agrupadas por feature
-│   │   │   ├── 📂 auth/             # Ejemplo: Autenticación
-│   │   │   │   └── 📄 index.js
-│   │   │   ├── 📂 levels/           # Ejemplo: Niveles o gamificación
-│   │   │   │   └── 📄 index.js
-│   │   │   ├── 📂 settings/         # Ejemplo: Ajustes de la aplicación
-│   │   │   │   └── 📄 index.js
-│   │   │   └── 📂 sublevels/        # Ejemplo: Funcionalidades secundarias
-│   │   │       └── 📄 index.js
-│   │   ├── 📂 screens/              # Pantallas o vistas de la aplicación
-│   │   │   ├── 📂 navigation/       # Configuración de navegación (React Navigation)
-│   │   │   │   └── 📄 MainNavigator.js
-│   │   │   ├── 📂 home/             # Pantalla de inicio
-│   │   │   │   └── 📄 index.js
-│   │   │   ├── 📂 profile/          # Pantalla de perfil de usuario
-│   │   │   │   └── 📄 index.js
-│   │   │   ├── 📂 settings/         # Pantalla de ajustes
-│   │   │   │   └── 📄 index.js
-│   │   │   └── 📂 layouts/          # Layouts reutilizables (header, footer, contenedores)
-│   │   │       └── 📄 index.js
-│   │   ├── 📂 components/           # Componentes UI específicos de la presentación
-│   │   │   └── 📄 index.js
-│   │   ├── 📂 hooks/                # Hooks personalizados para la UI
-│   │   │   └── 📄 index.js
-│   │   └── 📂 middlewares/          # Middlewares para el flujo de la UI
-│   │       └── 📄 index.js
-├── 📂 shared/                   # Elementos reutilizables en varias capas
-│   ├── 📂 components/           # Componentes UI compartidos (botones, modals, etc.)
-│   │   └── 📄 Button.js         # Ejemplo de componente compartido (Button)
-│   ├── 📂 hooks/                # Hooks compartidos
-│   │   └── 📄 useCustomHook.js  # Ejemplo de hook compartido
-│   ├── 📂 middlewares/          # Middlewares reutilizables
-│   │   └── 📄 authMiddleware.js # Ejemplo de middleware de autenticación
-│   ├── 📂 themes/               # Temas y estilos globales, con pautas de accesibilidad
-│   │   └── 📄 lightTheme.js     # Ejemplo de tema claro
-│   ├── 📂 utils/                # Utilidades transversales
-│   │   └── 📄 formatDate.js     # Ejemplo de utilidad para formatear fechas
-│   └── 📂 validators/           # Validadores de formularios o datos
-│       └── 📄 emailValidator.js # Ejemplo de validador de emails
-│   └── 📂 tests/                    # Pruebas automatizadas (unitarias, integración, e2e)
-│       ├── 📂 e2e/                 # Pruebas end-to-end
-│       │   └── 📄 example.e2e.js    # Ejemplo de prueba end-to-end
-│       ├── 📂 integration/         # Pruebas de integración
-│       │   └── 📄 example.integration.js # Ejemplo de prueba de integración
-│       └── 📂 unit/                # Pruebas unitarias
-│           └── 📄 example.unit.js   # Ejemplo de prueba unitaria
+│   │   ├── 📂 repositories/             # Contratos (interfaces) de repositorios
+│   │   │   ├── 📄 IUserRepository.js
+│   │   │   ├── 📄 ILevelRepository.js
+│   │   │   📄 BaseRepository.js         # Clase base para repositorios
+│   │   └── 📂 useCases/                 # Casos de uso que encapsulan la lógica de negocio
+│   │       ├── 📄 GetUserUseCase.js
+│   │       ├── 📄 GetLevelsUseCase.js
+│   │       📄 BaseUseCase.js            # Clase base para casos de uso
+│   ├── 📂 infrastructure/               # Implementaciones técnicas y acceso a datos
+│   │   ├── 📂 database/                 # Conexión a la base de datos y modelos
+│   │   │   ├── 📂 connection/           # Configuración y conexión a la base de datos
+│   │   │   │   └── 📄 DatabaseConnection.js
+│   │   │   ├── 📂 models/               # Esquemas y modelos (ORM o validación de datos)
+│   │   │   │   ├── 📄 UserModel.js
+│   │   │   │   └── 📄 LevelModel.js
+│   │   │   └── 📂 repositories/         # Implementación de repositorios de datos
+│   │   │       ├── 📄 UserRepository.js
+│   │   │       └── 📄 LevelRepository.js
+│   │   ├── 📂 services/                 # Servicios externos y lógica de integración
+│   │   │   ├── 📂 adapters/             # Adaptadores para consumo de APIs externas
+│   │   │   │   └── 📄 ApiAdapter.js
+│   │   │   └── 📂 implementations/      # Implementación de servicios (p.ej. autenticación)
+│   │   │       └── 📄 AuthService.js
+│   │   ├── 📂 security/                 # Seguridad, autenticación y autorización
+│   │   │   └── 📂 auth/                 # Módulo de autenticación y cifrado
+│   │   │       ├── 📄 SecureStorage.js
+│   │   │       └── 📄 EncryptionService.js
+│   │   ├── 📂 telemetry/                # Monitoreo y tracking de métricas
+│   │   │   └── 📄 TelemetryService.js
+│   │   └── 📂 middleware/               # Middlewares específicos de la infraestructura
+│   │       └── 📄 InfrastructureMiddleware.js
+│   ├── 📂 presentation/                 # Capa de presentación: UI, navegación y gestión de estado
+│   │   ├── 📂 base/                     # Componentes base de presentación
+│   │   │   📄 BaseViewModel.js          # Clase base para ViewModels
+│   │   ├── 📂 components/               # Componentes UI reutilizables
+│   │   │   ├── 📄 Button.js
+│   │   │   └── 📄 Input.js
+│   │   ├── 📂 hooks/                    # Hooks personalizados para la UI
+│   │   │   └── 📄 useCustomHook.js
+│   │   ├── 📂 screens/                  # Pantallas (vistas) organizadas por feature
+│   │   │   ├── 📂 Home/                 # Ejemplo: Pantalla de inicio
+│   │   │   │   ├── 📄 HomeScreen.js     # Vista (View)
+│   │   │   │   └── 📄 HomeViewModel.js  # Lógica de presentación (ViewModel)
+│   │   │   ├── 📂 Profile/              # Ejemplo: Pantalla de perfil
+│   │   │   │   ├── 📄 ProfileScreen.js
+│   │   │   │   └── 📄 ProfileViewModel.js
+│   │   │   └── 📂 Settings/             # Ejemplo: Pantalla de ajustes
+│   │   │       ├── 📄 SettingsScreen.js
+│   │   │       └── 📄 SettingsViewModel.js
+│   │   ├── 📂 state/                    # Gestión del estado global (Redux, Context API, etc.)
+│   │   │   ├── 📂 actions/              # Acciones para el store
+│   │   │   │   └── 📄 userActions.js
+│   │   │   ├── 📂 reducers/             # Reducers o slices del estado
+│   │   │   │   └── 📄 userReducer.js
+│   │   │   ├── 📂 middleware/           # Middlewares para el store (ej. logger, etc.)
+│   │   │   │   └── 📄 loggerMiddleware.js
+│   │   │   └── 📄 store.js              # Configuración y creación del store
+│   │   └── 📂 navigation/               # Navegación propia de la capa de presentación
+│   │       └── 📄 AppNavigator.js
+│   ├── 📂 shared/                       # Recursos y utilidades compartidas entre capas
+│   │   ├── 📂 components/               # Componentes UI compartidos (botones, cards, etc.)
+│   │   │   └── 📄 Card.js
+│   │   ├── 📂 hooks/                    # Hooks compartidos entre módulos
+│   │   │   └── 📄 useAuth.js
+│   │   ├── 📂 themes/                   # Temas y estilos globales (incluyendo pautas de accesibilidad)
+│   │   │   └── 📄 lightTheme.js
+│   │   └── 📂 utils/                    # Funciones helper, validadores y utilidades comunes
+│   │       └── 📄 formatDate.js
+│   └── 📂 i18n/                         # Internacionalización y localización
+│       ├── 📄 en.json
+│       ├── 📄 es.json
+│       └── 📄 index.js
+├── 📂 tests/                            # Pruebas automatizadas
+│   ├── 📂 unit/                         # Pruebas unitarias
+│   │   └── 📄 sample.unit.test.js
+│   ├── 📂 integration/                  # Pruebas de integración
+│   │   └── 📄 sample.integration.test.js
+│   └── 📂 e2e/                          # Pruebas end-to-end
+│       └── 📄 sample.e2e.test.js
 ├── 📄 .gitignore
-├── 📄 env.example                   # Ejemplo de variables de 
+├── 📄 package.json
 └── 📄 README.md
 ```
 
@@ -292,7 +294,153 @@ Tienes dos opciones para usar este template:
    npx react-native run-android  # Para Android
    npx react-native run-ios      # Para iOS
    ```
+### Opción 3: Usando `comandos`
+# Crear la carpetas y archivos
+```bash
+# Crear directorios para assets
+mkdir -p assets/fonts assets/images assets/scripts assets/styles
 
+# Crear directorios para la capa core
+mkdir -p src/core/config src/core/adapters src/core/di src/core/interfaces src/core/logging src/core/middleware src/core/navigation src/core/utils src/core/constants src/core/errors docs
+
+# Crear directorios para la capa domain
+mkdir -p src/domain/entities src/domain/repositories src/domain/useCases
+
+# Crear directorios para la infraestructura
+mkdir -p src/infrastructure/database/connection src/infrastructure/database/models src/infrastructure/database/repositories
+mkdir -p src/infrastructure/services/adapters src/infrastructure/services/implementations
+mkdir -p src/infrastructure/security/auth src/infrastructure/telemetry src/infrastructure/middleware
+
+# Crear directorios para la presentación (UI)
+mkdir -p src/presentation/base src/presentation/components src/presentation/hooks
+mkdir -p src/presentation/screens/Home src/presentation/screens/Profile src/presentation/screens/Settings
+mkdir -p src/presentation/state/actions src/presentation/state/reducers src/presentation/state/middleware
+mkdir -p src/presentation/navigation
+
+# Crear directorios para recursos compartidos
+mkdir -p src/shared/components src/shared/hooks src/shared/themes src/shared/utils
+
+# Crear directorios para internacionalización
+mkdir -p src/i18n
+
+# Crear directorios para pruebas
+mkdir -p tests/unit tests/integration tests/e2e
+
+touch docs/index.md
+
+# Archivos en src/core/config
+touch src/core/config/AppConfig.js src/core/config/ConfigAdapter.js src/core/config/index.js
+
+# Archivos en src/core/adapters
+touch src/core/adapters/HttpAdapter.js src/core/adapters/DatabaseAdapter.js
+touch src/core/adapters/BaseAdapter.js  # Clase base para adaptadores
+
+# Archivo en src/core/di
+touch src/core/di/dependencyContainer.js
+
+# Archivos en src/core/interfaces
+touch src/core/interfaces/ILogger.js src/core/interfaces/IRepository.js
+
+# Archivo en src/core/logging
+touch src/core/logging/Logger.js
+
+# Archivo en src/core/middleware
+touch src/core/middleware/GlobalMiddleware.js
+
+# Archivo en src/core/navigation
+touch src/core/navigation/AppNavigator.js
+
+# Archivo en src/core/utils
+touch src/core/utils/helper.js
+
+# Archivos en src/core/constants y src/core/errors (nuevos)
+touch src/core/constants/Constants.js  # Constantes globales
+touch src/core/errors/CustomErrors.js    # Manejo centralizado de errores
+
+# Archivos en src/domain/entities
+touch src/domain/entities/User.js src/domain/entities/Level.js src/domain/entities/index.js
+
+# Archivos en src/domain/repositories
+touch src/domain/repositories/IUserRepository.js src/domain/repositories/ILevelRepository.js
+touch src/domain/repositories/BaseRepository.js  # Clase base para repositorios
+
+# Archivos en src/domain/useCases
+touch src/domain/useCases/GetUserUseCase.js src/domain/useCases/GetLevelsUseCase.js
+touch src/domain/useCases/BaseUseCase.js   # Clase base para casos de uso
+
+# Archivos en src/infrastructure/database/connection
+touch src/infrastructure/database/connection/DatabaseConnection.js
+
+# Archivos en src/infrastructure/database/models
+touch src/infrastructure/database/models/UserModel.js src/infrastructure/database/models/LevelModel.js
+
+# Archivos en src/infrastructure/database/repositories
+touch src/infrastructure/database/repositories/UserRepository.js src/infrastructure/database/repositories/LevelRepository.js
+
+# Archivos en src/infrastructure/services/adapters y implementations
+touch src/infrastructure/services/adapters/ApiAdapter.js
+touch src/infrastructure/services/implementations/AuthService.js
+
+# Archivos en src/infrastructure/security/auth
+touch src/infrastructure/security/auth/SecureStorage.js src/infrastructure/security/auth/EncryptionService.js
+
+# Archivo en src/infrastructure/telemetry
+touch src/infrastructure/telemetry/TelemetryService.js
+
+# Archivo en src/infrastructure/middleware
+touch src/infrastructure/middleware/InfrastructureMiddleware.js
+
+# Archivos en src/presentation/base (nuevos)
+touch src/presentation/base/BaseViewModel.js  # Clase base para ViewModels
+
+# Archivos en src/presentation/components
+touch src/presentation/components/Button.js src/presentation/components/Input.js
+
+# Archivo en src/presentation/hooks
+touch src/presentation/hooks/useCustomHook.js
+
+# Archivos en src/presentation/screens/Home
+mkdir -p src/presentation/screens/Home  # Asegurarse de que el directorio exista
+touch src/presentation/screens/Home/HomeScreen.js src/presentation/screens/Home/HomeViewModel.js
+
+# Archivos en src/presentation/screens/Profile
+mkdir -p src/presentation/screens/Profile
+touch src/presentation/screens/Profile/ProfileScreen.js src/presentation/screens/Profile/ProfileViewModel.js
+
+# Archivos en src/presentation/screens/Settings
+mkdir -p src/presentation/screens/Settings
+touch src/presentation/screens/Settings/SettingsScreen.js src/presentation/screens/Settings/SettingsViewModel.js
+
+# Archivos en src/presentation/state (acciones, reducers, middleware y store)
+mkdir -p src/presentation/state/actions src/presentation/state/reducers src/presentation/state/middleware
+touch src/presentation/state/actions/userActions.js
+touch src/presentation/state/reducers/userReducer.js
+touch src/presentation/state/middleware/loggerMiddleware.js
+touch src/presentation/state/store.js
+
+# Archivo en src/presentation/navigation
+mkdir -p src/presentation/navigation
+touch src/presentation/navigation/AppNavigator.js
+
+# Archivos en src/shared
+touch src/shared/components/Card.js
+touch src/shared/hooks/useAuth.js
+touch src/shared/themes/lightTheme.js
+touch src/shared/utils/formatDate.js
+
+# Archivos en src/i18n
+touch src/i18n/en.json src/i18n/es.json src/i18n/index.js
+
+# Archivos en tests
+mkdir -p tests/unit tests/integration tests/e2e
+touch tests/unit/sample.unit.test.js tests/integration/sample.integration.test.js tests/e2e/sample.e2e.test.js
+
+# Crear archivos dummy en cada carpeta
+touch assets/fonts/main.ttf
+touch assets/images/logo.png
+touch assets/scripts/main.js
+touch assets/styles/main.css
+```
 ---
 
 ## 🤝 Contribuciones
