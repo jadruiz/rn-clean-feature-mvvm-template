@@ -1,12 +1,16 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { Config } from './src/core/config/environment/EnvConfig';
+import { ConfigAdapter } from '@core/config/environment/ConfigAdapter';
+
+const config = ConfigAdapter.getInstance();
 
 const App = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>API Base URL: {Config.API_URL}</Text>
-      <Text style={styles.text}>Entorno: {Config.ENV}</Text>
+      <Text style={styles.text}>API Base URL: {config.get<string>('API_URL')}</Text>
+      <Text style={styles.text}>Entorno: {config.get<string>('ENV')}</Text>
+      <Text style={styles.text}>App: {config.get<string>('APP_NAME')}</Text>
+      <Text style={styles.text}>Versión: {config.get<string>('VERSION')}</Text>
     </View>
   );
 };

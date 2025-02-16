@@ -1,26 +1,27 @@
 {
   "compilerOptions": {
-    "target": "esnext",                      // Usa la versión más reciente de ECMAScript
-    "module": "commonjs",                    // Mantiene compatibilidad con Node.js
-    "allowJs": true,                          // Permite usar archivos .js en el proyecto
-    "allowSyntheticDefaultImports": true,     // Importaciones por defecto en módulos sin exports explícitos
-    "esModuleInterop": true,                  // Facilita la interoperabilidad con módulos CommonJS
+    "target": "esnext", // Usa la versión más reciente de ECMAScript
+    "module": "commonjs", // Mantiene compatibilidad con Node.js
+    "allowJs": true, // Permite usar archivos .js en el proyecto
+    "allowSyntheticDefaultImports": true, // Importaciones por defecto en módulos sin exports explícitos
+    "esModuleInterop": true, // Facilita la interoperabilidad con módulos CommonJS
     "forceConsistentCasingInFileNames": true, // Fuerza consistencia en nombres de archivos
-    "jsx": "react-native",                    // Indica a TypeScript que es un proyecto React Native
-    "lib": ["dom", "esnext"],                 // Usa bibliotecas de DOM y ECMAScript moderno
-    "moduleResolution": "node",               // Usa el sistema de módulos de Node.js
-    "noEmit": true,                            // No genera archivos de salida .js
-    "skipLibCheck": true,                      // Evita revisar las definiciones de tipos en node_modules
-    "resolveJsonModule": true,                 // Permite importar archivos JSON
-    "strict": true,                            // Habilita todas las reglas estrictas de TypeScript
-    "baseUrl": "./src",                        // Define la base para los imports relativos
-    "paths": {                                 // Alias para importaciones más limpias
-      "@assets/*": ["../assets/*"],
-      "@core/*": ["./core/*"],
-      "@domain/*": ["./domain/*"],
-      "@infrastructure/*": ["./infrastructure/*"],
-      "@presentation/*": ["./presentation/*"],
-      "@utils/*": ["./utils/*"]
+    "jsx": "react-native", // Indica a TypeScript que es un proyecto React Native
+    "lib": ["dom", "esnext"], // Usa bibliotecas de DOM y ECMAScript moderno
+    "moduleResolution": "node", // Usa el sistema de módulos de Node.js
+    "noEmit": true, // No genera archivos de salida .js
+    "skipLibCheck": true, // Evita revisar las definiciones de tipos en node_modules
+    "resolveJsonModule": true, // Permite importar archivos JSON
+    "strict": true, // Habilita todas las reglas estrictas de TypeScript
+    "baseUrl": "./src", // Define la base para los imports relativos
+    "paths": {
+      // Alias para importaciones más limpias
+      "@assets/*": ["assets/*"],
+      "@core/*": ["core/*"],
+      "@domain/*": ["domain/*"],
+      "@infrastructure/*": ["infrastructure/*"],
+      "@presentation/*": ["presentation/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "exclude": ["node_modules", "babel.config.js", "metro.config.js"],
