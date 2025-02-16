@@ -135,3 +135,49 @@ cypress/screenshots/
 
 # React Native Debugger
 .react-native-debugger/
+
+# Archivos específicos de Next.js
+.vercel/
+.netlify/
+.next/
+
+# Archivos de configuración de ESLint y Prettier
+.eslintcache
+.prettiercache
+
+# Archivos de Jest y pruebas
+.jest/
+jest.config.js
+coverage/
+
+# Archivos de Cypress
+cypress/videos/
+cypress/screenshots/
+
+# Archivos de Playwright (si lo usas)
+playwright-report/
+test-results/
+
+# Archivos de Storybook
+.storybook-out/
+storybook-static/
+
+# Archivos de TypeScript
+*.d.ts
+
+# Archivos de configuración de Babel y Webpack (si los generas dinámicamente)
+.babelrc
+.webpack/
+
+# Archivos de caché de herramientas de desarrollo
+.nyc_output/
+node_modules/.cache/
+
+# Logs de PM2 (si usas PM2 para procesos en producción)
+.pm2/logs/
+.pm2/pids/
+.pm2/dump.pm2
+
+# Archivos específicos de Firebase (si usas Firebase)
+.firebase/
+.firebaserc
