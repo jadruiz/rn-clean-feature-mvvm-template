@@ -1,183 +1,135 @@
-# Dependencias y archivos de instalación
+# 📌 Aprende más sobre .gitignore:
+# https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# ==============================
+# 📦 Dependencias y Paquetes
+# ==============================
 node_modules/
-.pnpm-store/
-.pnp/
-.pnp.js
 package-lock.json
 yarn.lock
+pnpm-lock.yaml
 
-# Expo & React Native (Bare Flow)
+# ==============================
+# 🚀 Expo - Archivos y Caché
+# ==============================
 .expo/
 .expo-shared/
 dist/
 web-build/
-*.expo/
-*.expo-shared/
+expo-env.d.ts
 
-# Archivos de Build y Caché
-/build/
-.gradle/
-.idea/
-.vscode/
-logs/
-*.log
-*.gz
-*.bz2
-*.tar
-*.zip
-*.rar
-*.7z
-.history/
+# ==============================
+# 📱 Archivos Nativos (Android/iOS)
+# ==============================
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+android/app/build/
+android/.gradle/
+android/.idea/
+android/local.properties
+android/app/src/debug/
+android/app/src/androidTest/
+android/app/src/test/
+ios/Pods/
+ios/.DS_Store
+ios/build/
+ios/DerivedData/
 
-# Configuración de Metro Bundler
+# ==============================
+# 🚆 Metro Bundler - Caché
+# ==============================
 .metro/
 .metro-health-check*
 
-# Archivos Temporales y de Debugging
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-*.tsbuildinfo
-*.pid
-*.pid.lock
-*.tgz
-*.swp
-*.swo
-*.swn
-
-# Archivos de configuración y variables de entorno
+# ==============================
+# 🛠️ Archivos de Configuración Local y Variables de Entorno
+# ==============================
 .env
 .env*.local
-.env*.development
-.env*.staging
-.env*.production
+.env.production
+.env.development
+.env.testing
+.env.staging
 
-# Archivos Sensibles (Claves y Certificados)
-*.pem
-*.cert
-*.key
-*.csr
-*.crt
-*.pfx
-*.p12
-*.jks
-*.keystore
-*.p8
-*.mobileprovision
-google-services.json
-app/google-services.json
-app/App_Resources/Android/google-services.json
-app/App_Resources/iOS/GoogleService-Info.plist
-fastlane/.env
-fastlane/report.xml
-
-# Archivos específicos de macOS
-.DS_Store
-._*
-.Spotlight-V100
-.Trashes
-*.lock
-*.xcuserstate
-
-# Archivos específicos de Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-*.lnk
-
-# Archivos específicos de Linux
-.npm/
-.npmrc
-.cache/
-.trash/
-lost+found/
-
-# Archivos específicos de Android (Gradle & Keystore)
-*.apk
-*.aab
-*.so
-*.iml
-*.dex
-.cxx/
-.externalNativeBuild/
-captures/
-outputs/
+# ==============================
+# 🐛 Archivos de Logs y Depuración
+# ==============================
+npm-debug.*
+yarn-debug.*
+yarn-error.*
 *.log
-*.keystore
+debug.log
 
-# Archivos específicos de iOS (Xcode)
-ios/Pods/
-ios/.symlinks/
-ios/build/
-ios/DerivedData/
-xcuserdata/
-xcshareddata/
-*.xcworkspace
-*.xcodeproj/project.xcworkspace/
-*.xcodeproj/xcuserdata/
-
-# Archivos de Configuración de IDEs y Editores de Código
+# ==============================
+# 🖥️ Configuración de Editores de Código
+# ==============================
 .vscode/
 .idea/
-*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Otros Archivos de Caché y Configuración
-*.cache
-.cache/
-*.eslintcache
-.next/
-out/
+# ==============================
+# 💻 Caché del Sistema Operativo
+# ==============================
+.DS_Store
+Thumbs.db
+*.pem
+
+# ==============================
+# 🌐 Archivos de Tipos y Compilación de TypeScript
+# ==============================
+*.tsbuildinfo
+*.d.ts
+types/
+
+# ==============================
+# 📊 Cobertura de Pruebas y Reportes
+# ==============================
 coverage/
-jest/
-cypress/videos/
-cypress/screenshots/
-
-# React Native Debugger
-.react-native-debugger/
-
-# Archivos específicos de Next.js
-.vercel/
-.netlify/
-.next/
-
-# Archivos de configuración de ESLint y Prettier
-.eslintcache
-.prettiercache
-
-# Archivos de Jest y pruebas
-.jest/
-jest.config.js
-coverage/
-
-# Archivos de Cypress
-cypress/videos/
-cypress/screenshots/
-
-# Archivos de Playwright (si lo usas)
-playwright-report/
+reports/
 test-results/
+cypress/videos/
+cypress/screenshots/
 
-# Archivos de Storybook
-.storybook-out/
+# ==============================
+# 📄 Archivos de Storybook
+# ==============================
+.storybook/
 storybook-static/
 
-# Archivos de TypeScript
-*.d.ts
+# ==============================
+# 🔄 Archivos de Caché de Linter y Prettier
+# ==============================
+eslintcache
+.prettiercache
 
-# Archivos de configuración de Babel y Webpack (si los generas dinámicamente)
+# ==============================
+# 🔧 Archivos Generados de Build y Deploy
+# ==============================
+build/
+node_modules/
+public/
+tmp/
+out/
+.cache/
+
+# ==============================
+# 🚀 Archivos de Automatización y Configuración
+# ==============================
+# Estos archivos pueden personalizarse, pero generalmente no deben subirse
 .babelrc
-.webpack/
-
-# Archivos de caché de herramientas de desarrollo
-.nyc_output/
-node_modules/.cache/
-
-# Logs de PM2 (si usas PM2 para procesos en producción)
-.pm2/logs/
-.pm2/pids/
-.pm2/dump.pm2
-
-# Archivos específicos de Firebase (si usas Firebase)
-.firebase/
-.firebaserc
+babel.config.js
+metro.config.js
+tsconfig.json
+.eslintrc.js
+.prettierrc
+.editorconfig
+.npmrc
+.nvmrc
