@@ -1,6 +1,14 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { ConfigAdapter } from '@core/config/environment/ConfigAdapter';
+import { Logger, consoleAdapter, LogLevel } from '@core/logging';
+
+const logger = new Logger(consoleAdapter, LogLevel.DEBUG);
+
+logger.debug('Mensaje de depuración', { debugInfo: 'info extra' });
+logger.info('Mensaje informativo');
+logger.warn('Mensaje de advertencia');
+logger.error('Mensaje de error', new Error('Oops!'));
 
 const config = ConfigAdapter.getInstance();
 
