@@ -1,9 +1,10 @@
 // src/core/security/AuthService.ts
+import { injectable } from 'tsyringe';
 import { Logger, consoleAdapter, LogLevel } from '@core/logging';
 
 // Opcional: se puede usar el Logger instanciado para reportar eventos de seguridad.
 const logger = new Logger(consoleAdapter, LogLevel.DEBUG);
-
+@injectable()
 export class AuthService {
   /**
    * Simula el login y retorna un token.
