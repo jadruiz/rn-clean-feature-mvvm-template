@@ -216,11 +216,9 @@ La aplicación sigue los principios de **Clean Architecture**, **Feature-Based A
 ```
 
 ---
-
 ## 🚀 Uso
 
 ### Clonando el repositorio
-
 ```bash
 git clone https://github.com/usuario/rn-clean-feature-mvvm-template.git
 cd rn-clean-feature-mvvm-template
@@ -233,7 +231,49 @@ npx react-native run-android  # Para Android
 npx react-native run-ios      # Para iOS
 ```
 
----
+## 🚀 Uso de Funciones Clave
+
+El template incluye varias abstracciones que permiten la configuración de entornos, logging, telemetría, accesibilidad y seguridad.
+
+### 📜 **Ejemplo: Configuración global**
+El sistema de configuración utiliza `ConfigAdapter` para obtener valores desde las variables de entorno.
+
+```tsx
+import { Config } from '@core/config/environment/EnvConfig';
+
+const apiUrl = Config.get<string>('API_URL');
+console.log('API Base URL:', apiUrl);
+```
+
+### 📝 **Ejemplo: Logging estructurado**
+El sistema de logging sigue una arquitectura de adaptadores. Puedes utilizarlo de la siguiente manera:
+
+```tsx
+import { Logger, consoleAdapter, LogLevel } from '@core/logging';
+
+const logger = new Logger(consoleAdapter, LogLevel.INFO);
+logger.info('Evento importante', { userId: 123 });
+```
+
+### 📊 **Ejemplo: Registro de eventos con AnalyticsTracker**
+```tsx
+import { AnalyticsTracker } from '@core/observability/AnalyticsTracker';
+
+AnalyticsTracker.trackFeatureUsage('Login', { method: 'OAuth' });
+```
+
+### 🔐 **Ejemplo: Encriptación de datos**
+```tsx
+import { EncryptionService } from '@core/security/EncryptionService';
+
+const encryptedData = EncryptionService.encrypt('Información sensible');
+console.log('Texto cifrado:', encryptedData);
+
+const decryptedData = EncryptionService.decrypt(encryptedData);
+console.log('Texto descifrado:', decryptedData);
+```
+
+Consulta la [documentación detallada](docs/) para más ejemplos.
 
 ## 🛠 Contribuciones
 
@@ -253,8 +293,6 @@ fix(login): corregir error al validar tokens
 docs(readme): actualizar guía de instalación
 ```
 
----
-
 ## 📚 Documentación Adicional
 
 - [📄 Arquitectura y Diseño](docs/architecture.md)
@@ -263,8 +301,6 @@ docs(readme): actualizar guía de instalación
 - [📄 Logging y Telemetría](docs/logging.md)
 - [📄 Internacionalización](docs/i18n.md)
 - [📄 Pruebas y Calidad de Código](docs/testing.md)
-
----
 
 ## 📝 Licencia
 

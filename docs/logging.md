@@ -1,4 +1,4 @@
-# 📌 Logging en React Native Clean Feature MVVM Architecture Template
+# 📌 Logging
 
 Este documento describe el sistema de logging estructurado utilizado en la aplicación, así como las buenas prácticas y pautas para su uso.
 
@@ -153,6 +153,4 @@ El sistema de logging:
 ✅ **Centraliza** la forma de registrar información en la aplicación.
 ✅ **Facilita el cambio de destinos y formatos de logs** gracias a los adaptadores.
 ✅ **Permite ajustar el nivel de detalle** en función del entorno y las necesidades de depuración.
-
-📖 Para más detalles sobre la arquitectura y la relación con otras capas, consulta [`architecture.md`](../architecture.md) o la documentación de [`telemetry.md`](../telemetry.md) si quieres profundizar en la monitorización de eventos y métricas.
 

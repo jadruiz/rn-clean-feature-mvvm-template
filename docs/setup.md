@@ -1,12 +1,12 @@
 # 🛠 Configuración y Setup del Proyecto
 
-Este documento describe la configuración inicial del proyecto y las buenas prácticas aplicadas para garantizar modularidad, escalabilidad y mantenimiento eficiente. 
+Este documento describe la configuración inicial del proyecto y las buenas prácticas aplicadas para garantizar modularidad, escalabilidad y mantenimiento eficiente.
 
 ---
 
 ## 📌 Abstracciones y Principios de Diseño
 
-El proyecto sigue una arquitectura basada en **Clean Architecture** y **Feature-Based Architecture**, combinada con **MVVM** (Model-View-ViewModel) para separar la lógica de presentación de la lógica de negocio. 
+El proyecto sigue una arquitectura basada en **Clean Architecture** y **Feature-Based Architecture**, combinada con **MVVM** (Model-View-ViewModel) para separar la lógica de presentación de la lógica de negocio.
 
 ### 🔹 Configuración Centralizada con el ConfigAdapter
 - Se usa el patrón **Singleton** para garantizar que la configuración sea única en toda la aplicación.
@@ -17,7 +17,7 @@ El proyecto sigue una arquitectura basada en **Clean Architecture** y **Feature-
 
 ---
 
-## 📂 Estructura de Configuración
+## 📺 Estructura de Configuración
 
 📌 **Ubicación:** `src/core/config/environment/`
 
@@ -33,7 +33,7 @@ console.log(Config.get('API_URL'));
 
 ---
 
-## 📦 Agregando Nuevas Funcionalidades
+## 📆 Agregando Nuevas Funcionalidades
 
 El sistema de configuración permite agregar nuevas fuentes de datos de manera sencilla. Ejemplos:
 - 🔹 **Integrar Firebase Remote Config** para ajustar configuraciones sin actualizar la app.
@@ -42,7 +42,7 @@ El sistema de configuración permite agregar nuevas fuentes de datos de manera s
 
 ---
 
-## 🏗️ Buenas Prácticas Aplicadas y Futuras
+## 🏧 Buenas Prácticas Aplicadas y Futuras
 
 - ✅ **Principio de Única Responsabilidad (SRP)**: Cada módulo de configuración tiene una función clara y separada.
 - ✅ **Desacoplamiento**: Se evita que la lógica de negocio dependa directamente de variables de entorno.
@@ -72,3 +72,4 @@ export default function App() {
     </View>
   );
 }
+```

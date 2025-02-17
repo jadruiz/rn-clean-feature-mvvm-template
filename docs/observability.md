@@ -6,14 +6,14 @@ Este documento describe cómo el proyecto maneja la observabilidad, enfocándose
 
 ## Tabla de Contenidos
 
-- [Introducción](#introducción)
+- [Introducción](#introducci%C3%B3n)
 - [Objetivos de la Observabilidad](#objetivos-de-la-observabilidad)
-- [Estructura y Ubicación](#estructura-y-ubicación)
+- [Estructura y Ubicación](#estructura-y-ubicaci%C3%B3n)
 - [Componentes de Observabilidad](#componentes-de-observabilidad)
   - [AnalyticsTracker](#analyticstracker)
   - [PerformanceMonitor](#performancemonitor)
-- [Integración con Telemetría y Logging](#integración-con-telemetría-y-logging)
-- [Buenas Prácticas](#buenas-prácticas)
+- [Integración con Telemetría y Logging](#integraci%C3%B3n-con-telemetr%C3%ADa-y-logging)
+- [Buenas Prácticas](#buenas-pr%C3%A1cticas)
 - [Ejemplos de Uso](#ejemplos-de-uso)
 - [Consideraciones Adicionales](#consideraciones-adicionales)
 
