@@ -1,6 +1,4 @@
 // src/core/di/dependencyContainer.ts
-
-import 'reflect-metadata';
 import { container } from 'tsyringe';
 
 // Importa tus servicios

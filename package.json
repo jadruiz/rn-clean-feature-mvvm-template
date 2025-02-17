@@ -12,14 +12,18 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.5.1",
     "crypto-js": "^4.2.0",
     "expo": "^52.0.35",
     "expo-modules-core": "^2.2.2",
     "expo-secure-store": "~14.0.1",
     "expo-status-bar": "~2.0.1",
     "react": "18.3.1",
+    "react-error-boundary": "^5.0.0",
     "react-native": "0.76.7",
     "react-native-get-random-values": "^1.11.0",
+    "react-redux": "^9.2.0",
+    "reflect-metadata": "^0.2.2",
     "tsyringe": "^4.8.0"
   },
   "devDependencies": {
