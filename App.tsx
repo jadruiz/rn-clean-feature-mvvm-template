@@ -1,20 +1,18 @@
-// App.tsx
 import 'react-native-get-random-values';
-import React, { useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'reflect-metadata';
-import { Text, View, StyleSheet, Button, Alert } from 'react-native';
+import { Text, View, StyleSheet, Button, Alert, ActivityIndicator } from 'react-native';
 import { Config } from '@core/config/environment/EnvConfig';
 import { EncryptionService } from '@core/security/EncryptionService';
 import { AccessibilityHelper } from '@core/a11y/AccessibilityHelper';
 import { useA11yContext, A11yProvider } from '@core/a11y/A11yContext';
 import GlobalErrorBoundary from '@core/error/GlobalErrorBoundary';
-
-// Inicialización Global
-import '@core/config/initApp';
+import { initApp } from '@core/config/initApp';
+import { IStateAdapter } from '@core/state/interfaces/IStateAdapter';
+import { RootState } from '@core/state/redux/store';
 
 const AppContent = () => {
   const { screenReaderEnabled } = useA11yContext();
-  const firstButtonRef = useRef(null);
 
   const testEncryption = () => {
     try {
@@ -32,18 +30,41 @@ const AppContent = () => {
     <View style={styles.container}>
       <Text style={styles.text}>API URL: {Config.get<string>('API_URL')}</Text>
       {screenReaderEnabled && <Text style={styles.a11yText}>Lector de pantalla activo</Text>}
-      <Button title="Test Encryption" onPress={testEncryption} ref={firstButtonRef} />
+      <Button title="Test Encryption" onPress={testEncryption} />
     </View>
   );
 };
 
-const App = () => (
-  <GlobalErrorBoundary>
-    <A11yProvider>
-      <AppContent />
-    </A11yProvider>
-  </GlobalErrorBoundary>
-);
+const App = () => {
+  const [stateAdapter, setStateAdapter] = useState<IStateAdapter<RootState> | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    initApp().then((result) => {
+      if (result && result.stateAdapter) {
+        setStateAdapter(result.stateAdapter);
+      }
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#007AFF" />
+        <Text style={styles.loadingText}>Cargando aplicación...</Text>
+      </View>
+    );
+  }
+
+  return (
+    <GlobalErrorBoundary>
+      <A11yProvider>
+        <AppContent />
+      </A11yProvider>
+    </GlobalErrorBoundary>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -63,6 +84,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#007AFF',
     marginVertical: 10,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#007AFF',
+    marginTop: 10,
   },
 });
 
