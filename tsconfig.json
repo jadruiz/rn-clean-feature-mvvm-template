@@ -22,7 +22,8 @@
       "@infrastructure/*": ["infrastructure/*"],
       "@presentation/*": ["presentation/*"],
       "@utils/*": ["utils/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./src/@types"]
   },
   "exclude": ["node_modules", "babel.config.js", "metro.config.js"],
   "extends": "expo/tsconfig.base"
