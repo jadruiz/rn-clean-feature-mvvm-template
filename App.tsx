@@ -1,14 +1,14 @@
-// App.tsx
+// App.jsx
+import 'reflect-metadata';
 import 'react-native-get-random-values';
 import React, { useEffect, useState } from 'react';
-import 'reflect-metadata';
 import {
   Text,
   View,
   StyleSheet,
+  ActivityIndicator,
   Button,
   Alert,
-  ActivityIndicator,
 } from 'react-native';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@core/i18n/i18n';
@@ -16,52 +16,24 @@ import LanguageSwitcher from '@core/i18n/LanguageSwitcher';
 import { Config } from '@core/config/environment/EnvConfig';
 import { EncryptionService } from '@core/security/EncryptionService';
 import { AccessibilityHelper } from '@core/a11y/AccessibilityHelper';
-import { useA11yContext, A11yProvider } from '@core/a11y/A11yContext';
+import { A11yProvider, useA11yContext } from '@core/a11y/A11yContext';
 import GlobalErrorBoundary from '@presentation/components/GlobalErrorBoundary';
 import { initApp } from '@core/config/initApp';
-import { IStateAdapter } from '@core/state/interfaces/IStateAdapter';
-import { RootState } from '@core/state/redux/store';
 import { ThemeProvider, useTheme } from '@core/config/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
-import { NetworkManager } from '@core/network/NetworkManager';
+import { useNetworkStatus } from '@core/hooks/useNetworkStatus';
 
 const AppContent = () => {
   const { t } = useTranslation();
   const { screenReaderEnabled } = useA11yContext();
   const { theme, toggleTheme } = useTheme();
-  const [isConnected, setIsConnected] = useState<boolean | null>(null);
-  const [connectionType, setConnectionType] = useState<string>('unknown');
-
-  useEffect(() => {
-    // Verificar conexión inicial
-    NetworkManager.isOnline().then(setIsConnected);
-    NetworkManager.getConnectionType().then(setConnectionType);
-
-    // Suscribirse a cambios en la conectividad
-    const unsubscribe = NetworkManager.subscribe((state) => {
-      setIsConnected(state.isConnected ?? false);
-      setConnectionType(state.type);
-
-      console.log(`🔄 Cambio en la conexión: ${state.type}`);
-
-      // Mostrar alerta si se pierde la conexión
-      if (!state.isConnected) {
-        Alert.alert(
-          '⚠️ Conexión perdida',
-          'Parece que perdiste la conexión a Internet. Algunas funciones pueden no estar disponibles.',
-        );
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  // 🔥 Utiliza el hook useNetworkStatus para obtener la conectividad
+  const { isConnected, connectionType } = useNetworkStatus();
 
   const testEncryption = () => {
     try {
       const original = 'Texto de prueba';
-      EncryptionService.initSecretKey();
+      // Asumimos que initApp ya llamó a EncryptionService.initSecretKey()
       const encrypted = EncryptionService.encrypt(original);
       const decrypted = EncryptionService.decrypt(encrypted);
       AccessibilityHelper.announceForAccessibility(
@@ -81,7 +53,7 @@ const AppContent = () => {
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
       <Text style={[styles.text, { color: theme.colors.text }]}>
-        API URL: {Config.get<string>('API_URL')}
+        API URL: {Config.get('API_URL')}
       </Text>
       <Text
         style={[styles.networkText, { color: isConnected ? 'green' : 'red' }]}
@@ -115,17 +87,10 @@ const AppContent = () => {
 };
 
 const App = () => {
-  const [stateAdapter, setStateAdapter] =
-    useState<IStateAdapter<RootState> | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    initApp().then((result) => {
-      if (result?.stateAdapter) {
-        setStateAdapter(result.stateAdapter);
-      }
-      setLoading(false);
-    });
+    initApp().then(() => setLoading(false));
   }, []);
 
   if (loading) {

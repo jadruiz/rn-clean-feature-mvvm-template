@@ -7,9 +7,10 @@ import { DummyAnalyticsAdapter } from '@core/telemetry/AnalyticsAdapter';
 import { getStateAdapter } from '@core/state/adapters';
 import { IStateAdapter } from '@core/state/interfaces/IStateAdapter';
 import { RootState } from '@core/state/redux/store';
+import { EncryptionService } from '@core/security/EncryptionService';
 
 /**
- * Inicializa la aplicación: configura logging, telemetría y el estado global.
+ * Inicializa la aplicación: configura telemetría, logging, encriptación y el estado global.
  */
 export const initApp = async (): Promise<{
   stateAdapter: IStateAdapter<RootState>;
@@ -24,6 +25,10 @@ export const initApp = async (): Promise<{
     // 🔹 Inicializa Logger
     const logger = new Logger(consoleAdapter, LogLevel.DEBUG);
     logger.info('📢 Aplicación inicializada correctamente');
+
+    // 🔹 Inicializa Encriptación (clave secreta)
+    await EncryptionService.initSecretKey();
+    logger.info('🔐 Clave secreta inicializada');
 
     // 🔹 Cargar Adaptador de Estado (Redux o In-Memory)
     const stateAdapter = await getStateAdapter();
