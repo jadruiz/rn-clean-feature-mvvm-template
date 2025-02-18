@@ -1,7 +1,7 @@
 // src/core/state/redux/store.ts
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import authReducer from '../slices/authSlice';
-import { telemetryMiddleware } from '../middlewares/TelemetryMiddleware';
+import { telemetryMiddleware } from '../middlewares/telemetryMiddleware';
 import { Config } from '@core/config/environment/EnvConfig';
 
 // Combinar múltiples reducers

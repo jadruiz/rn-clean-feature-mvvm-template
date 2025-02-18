@@ -16,6 +16,7 @@ import { IStateAdapter } from '@core/state/interfaces/IStateAdapter';
 import { RootState } from '@core/state/redux/store';
 import { ThemeProvider, useTheme } from '@core/config/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
+import { NetworkManager } from '@core/network/NetworkManager';
 
 const AppContent = () => {
   const { t } = useTranslation();
@@ -37,6 +38,16 @@ const AppContent = () => {
     }
   };
 
+  // Función para probar la conectividad de red
+  const checkConnectivity = async () => {
+    try {
+      const online = await NetworkManager.isOnline();
+      Alert.alert('Conectividad', online ? 'Online' : 'Offline');
+    } catch (error: any) {
+      Alert.alert('Error', error.message);
+    }
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Text style={[styles.text, { color: theme.colors.text }]}>
@@ -48,6 +59,7 @@ const AppContent = () => {
         </Text>
       )}
       <Button title="Test Encryption" onPress={testEncryption} color={theme.colors.primary} />
+      <Button title="Check Connectivity" onPress={checkConnectivity} color={theme.colors.secondary} />
       <LanguageSwitcher />
       <Text style={[styles.welcomeText, { color: theme.colors.text }]}>{t('welcome')}</Text>
       <Button title="Toggle Theme" onPress={toggleTheme} color={theme.colors.secondary} />
