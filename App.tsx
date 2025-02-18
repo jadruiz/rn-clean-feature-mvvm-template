@@ -2,7 +2,14 @@
 import 'react-native-get-random-values';
 import React, { useEffect, useState } from 'react';
 import 'reflect-metadata';
-import { Text, View, StyleSheet, Button, Alert, ActivityIndicator } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@core/i18n/i18n';
 import LanguageSwitcher from '@core/i18n/LanguageSwitcher';
@@ -22,6 +29,34 @@ const AppContent = () => {
   const { t } = useTranslation();
   const { screenReaderEnabled } = useA11yContext();
   const { theme, toggleTheme } = useTheme();
+  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+  const [connectionType, setConnectionType] = useState<string>('unknown');
+
+  useEffect(() => {
+    // Verificar conexión inicial
+    NetworkManager.isOnline().then(setIsConnected);
+    NetworkManager.getConnectionType().then(setConnectionType);
+
+    // Suscribirse a cambios en la conectividad
+    const unsubscribe = NetworkManager.subscribe((state) => {
+      setIsConnected(state.isConnected ?? false);
+      setConnectionType(state.type);
+
+      console.log(`🔄 Cambio en la conexión: ${state.type}`);
+
+      // Mostrar alerta si se pierde la conexión
+      if (!state.isConnected) {
+        Alert.alert(
+          '⚠️ Conexión perdida',
+          'Parece que perdiste la conexión a Internet. Algunas funciones pueden no estar disponibles.',
+        );
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const testEncryption = () => {
     try {
@@ -29,7 +64,9 @@ const AppContent = () => {
       EncryptionService.initSecretKey();
       const encrypted = EncryptionService.encrypt(original);
       const decrypted = EncryptionService.decrypt(encrypted);
-      AccessibilityHelper.announceForAccessibility('Prueba de encriptación completada');
+      AccessibilityHelper.announceForAccessibility(
+        'Prueba de encriptación completada',
+      );
       Alert.alert(
         'Prueba de Encriptación',
         `Original: ${original}\nEncrypted: ${encrypted}\nDecrypted: ${decrypted}`,
@@ -40,30 +77,51 @@ const AppContent = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <Text style={[styles.text, { color: theme.colors.text }]}>
         API URL: {Config.get<string>('API_URL')}
+      </Text>
+      <Text
+        style={[styles.networkText, { color: isConnected ? 'green' : 'red' }]}
+      >
+        {isConnected ? '🟢 Conectado' : '🔴 Sin conexión'}
+      </Text>
+      <Text style={[styles.networkType, { color: theme.colors.primary }]}>
+        Tipo de Conexión: {connectionType}
       </Text>
       {screenReaderEnabled && (
         <Text style={[styles.a11yText, { color: theme.colors.primary }]}>
           Lector de pantalla activo
         </Text>
       )}
-      <Button title="Test Encryption" onPress={testEncryption} color={theme.colors.primary} />
+      <Button
+        title="Test Encryption"
+        onPress={testEncryption}
+        color={theme.colors.primary}
+      />
       <LanguageSwitcher />
-      <Text style={[styles.welcomeText, { color: theme.colors.text }]}>{t('welcome')}</Text>
-      <Button title="Toggle Theme" onPress={toggleTheme} color={theme.colors.secondary} />
+      <Text style={[styles.welcomeText, { color: theme.colors.text }]}>
+        {t('welcome')}
+      </Text>
+      <Button
+        title="Toggle Theme"
+        onPress={toggleTheme}
+        color={theme.colors.secondary}
+      />
     </View>
   );
 };
 
 const App = () => {
-  const [stateAdapter, setStateAdapter] = useState<IStateAdapter<RootState> | null>(null);
+  const [stateAdapter, setStateAdapter] =
+    useState<IStateAdapter<RootState> | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     initApp().then((result) => {
-      if (result && result.stateAdapter) {
+      if (result?.stateAdapter) {
         setStateAdapter(result.stateAdapter);
       }
       setLoading(false);
@@ -103,6 +161,14 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  networkText: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  networkType: {
+    fontSize: 14,
     marginBottom: 10,
   },
   a11yText: {
