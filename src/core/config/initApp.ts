@@ -1,3 +1,4 @@
+// src/core/config/initApp.ts
 import { Logger } from '@core/logging/Logger';
 import { consoleAdapter } from '@core/logging/adapters/consoleAdapter';
 import { LogLevel } from '@core/logging/Logger';

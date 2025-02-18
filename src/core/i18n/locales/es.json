@@ -1,0 +1,10 @@
+{
+    "welcome": "¡Bienvenido!",
+    "login": {
+      "title": "Iniciar Sesión",
+      "button": "Ingresar"
+    },
+    "errors": {
+      "networkError": "Error de Red"
+    }
+  }

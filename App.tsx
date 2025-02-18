@@ -1,17 +1,22 @@
+// App.tsx
 import 'react-native-get-random-values';
 import React, { useEffect, useState } from 'react';
 import 'reflect-metadata';
 import { Text, View, StyleSheet, Button, Alert, ActivityIndicator } from 'react-native';
 import { Config } from '@core/config/environment/EnvConfig';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+import i18n from '@core/i18n/i18n';
+import LanguageSwitcher from '@core/i18n/LanguageSwitcher';
 import { EncryptionService } from '@core/security/EncryptionService';
 import { AccessibilityHelper } from '@core/a11y/AccessibilityHelper';
 import { useA11yContext, A11yProvider } from '@core/a11y/A11yContext';
-import GlobalErrorBoundary from '@core/error/GlobalErrorBoundary';
+import GlobalErrorBoundary from '@presentation/components/GlobalErrorBoundary';
 import { initApp } from '@core/config/initApp';
 import { IStateAdapter } from '@core/state/interfaces/IStateAdapter';
 import { RootState } from '@core/state/redux/store';
 
 const AppContent = () => {
+  const { t } = useTranslation();
   const { screenReaderEnabled } = useA11yContext();
 
   const testEncryption = () => {
@@ -20,7 +25,10 @@ const AppContent = () => {
       const encrypted = EncryptionService.encrypt(original);
       const decrypted = EncryptionService.decrypt(encrypted);
       AccessibilityHelper.announceForAccessibility('Prueba de encriptación completada');
-      Alert.alert('Prueba de Encriptación', `Original: ${original}\nEncrypted: ${encrypted}\nDecrypted: ${decrypted}`);
+      Alert.alert(
+        'Prueba de Encriptación',
+        `Original: ${original}\nEncrypted: ${encrypted}\nDecrypted: ${decrypted}`,
+      );
     } catch (error) {
       console.error('Error en encriptación', error);
     }
@@ -31,6 +39,9 @@ const AppContent = () => {
       <Text style={styles.text}>API URL: {Config.get<string>('API_URL')}</Text>
       {screenReaderEnabled && <Text style={styles.a11yText}>Lector de pantalla activo</Text>}
       <Button title="Test Encryption" onPress={testEncryption} />
+      {/* Agregamos el LanguageSwitcher para permitir cambiar de idioma en la UI */}
+      <LanguageSwitcher />
+      <Text>{t('welcome')}</Text>
     </View>
   );
 };
@@ -53,15 +64,19 @@ const App = () => {
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#007AFF" />
         <Text style={styles.loadingText}>Cargando aplicación...</Text>
+        {/* Opcional: Si deseas cambiar de idioma incluso durante el loading */}
+        <LanguageSwitcher />
       </View>
     );
   }
 
   return (
     <GlobalErrorBoundary>
-      <A11yProvider>
-        <AppContent />
-      </A11yProvider>
+      <I18nextProvider i18n={i18n}>
+        <A11yProvider>
+          <AppContent />
+        </A11yProvider>
+      </I18nextProvider>
     </GlobalErrorBoundary>
   );
 };
