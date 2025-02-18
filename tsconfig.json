@@ -16,12 +16,12 @@
     "baseUrl": "./src", // Define la base para los imports relativos
     "paths": {
       // Alias para importaciones más limpias
-      "@assets/*": ["assets/*"],
+      "@assets/*": ["../assets/*"],
+      "@common/*": ["common/*"],
       "@core/*": ["core/*"],
       "@domain/*": ["domain/*"],
       "@infrastructure/*": ["infrastructure/*"],
       "@presentation/*": ["presentation/*"],
-      "@utils/*": ["utils/*"],
       "@react-navigation/*": ["node_modules/@react-navigation/*"]
     },
     "typeRoots": ["./node_modules/@types", "./src/@types"]

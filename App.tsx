@@ -21,13 +21,13 @@ import GlobalErrorBoundary from '@presentation/components/GlobalErrorBoundary';
 import { initApp } from '@core/config/initApp';
 import { ThemeProvider, useTheme } from '@core/config/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
-import { useNetworkStatus } from '@core/hooks/useNetworkStatus';
+import { useNetworkStatus } from '@common/hooks/useNetworkStatus';
 
 const AppContent = () => {
   const { t } = useTranslation();
   const { screenReaderEnabled } = useA11yContext();
   const { theme, toggleTheme } = useTheme();
-  // 🔥 Utiliza el hook useNetworkStatus para obtener la conectividad
+
   const { isConnected, connectionType } = useNetworkStatus();
 
   const testEncryption = () => {
