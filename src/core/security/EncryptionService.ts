@@ -24,7 +24,7 @@ export class EncryptionService {
 
     if (env === 'development') {
       // Para desarrollo, usamos la clave directamente desde la configuración.
-      this.secretKey = Config.get<string>('EXPO_PUBLIC_SECRET_KEY');
+      this.secretKey = Config.get<string>('SECRET_KEY');
       logger.info(
         'EncryptionService: Usando clave de configuración (development).',
       );

@@ -26,6 +26,7 @@ const AppContent = () => {
   const testEncryption = () => {
     try {
       const original = 'Texto de prueba';
+      EncryptionService.initSecretKey();
       const encrypted = EncryptionService.encrypt(original);
       const decrypted = EncryptionService.decrypt(encrypted);
       AccessibilityHelper.announceForAccessibility('Prueba de encriptación completada');
@@ -35,16 +36,6 @@ const AppContent = () => {
       );
     } catch (error) {
       console.error('Error en encriptación', error);
-    }
-  };
-
-  // Función para probar la conectividad de red
-  const checkConnectivity = async () => {
-    try {
-      const online = await NetworkManager.isOnline();
-      Alert.alert('Conectividad', online ? 'Online' : 'Offline');
-    } catch (error: any) {
-      Alert.alert('Error', error.message);
     }
   };
 
@@ -59,7 +50,6 @@ const AppContent = () => {
         </Text>
       )}
       <Button title="Test Encryption" onPress={testEncryption} color={theme.colors.primary} />
-      <Button title="Check Connectivity" onPress={checkConnectivity} color={theme.colors.secondary} />
       <LanguageSwitcher />
       <Text style={[styles.welcomeText, { color: theme.colors.text }]}>{t('welcome')}</Text>
       <Button title="Toggle Theme" onPress={toggleTheme} color={theme.colors.secondary} />

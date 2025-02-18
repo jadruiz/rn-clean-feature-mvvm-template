@@ -1,18 +1,32 @@
 // src/presentation/navigation/stacks/MainStack.tsx
-import React from 'react';
+import React, { Suspense } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-// Importa las pantallas principales de tu aplicación
-import HomeScreen from '@presentation/features/home/view/HomeScreen';
+import { ActivityIndicator, View } from 'react-native';
+
+// Carga diferida de la pantalla principal
+const HomeScreen = React.lazy(
+  () => import('@presentation/features/home/view/HomeScreen'),
+);
 
 const Stack = createStackNavigator();
 
 export default function MainStack() {
   return (
-    <Stack.Navigator
-      initialRouteName="Home"
-      screenOptions={{ headerShown: false }}
+    <Suspense
+      fallback={
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <ActivityIndicator size="large" color="#007AFF" />
+        </View>
+      }
     >
-      <Stack.Screen name="Home" component={HomeScreen} />
-    </Stack.Navigator>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </Suspense>
   );
 }
