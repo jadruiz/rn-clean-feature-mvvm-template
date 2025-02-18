@@ -1,4 +1,4 @@
-// src/core/telemetry/AnalyticsAdapter.ts
+// src/core/observability/adapters/AnalyticsAdapter.ts
 import { Logger, consoleAdapter, LogLevel } from '@core/logging';
 
 /**

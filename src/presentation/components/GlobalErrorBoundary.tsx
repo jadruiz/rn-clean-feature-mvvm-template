@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { ErrorBoundary } from 'react-error-boundary';
-import TelemetryService from '@core/telemetry/TelemetryService';
+import TelemetryService from '@core/observability/services/TelemetryService';
 
 const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => {
   // Reportar error a telemetría

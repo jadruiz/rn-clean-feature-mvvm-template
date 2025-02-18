@@ -2,8 +2,8 @@
 import { Logger } from '@core/logging/Logger';
 import { consoleAdapter } from '@core/logging/adapters/consoleAdapter';
 import { LogLevel } from '@core/logging/Logger';
-import TelemetryService from '@core/telemetry/TelemetryService';
-import { DummyAnalyticsAdapter } from '@core/telemetry/AnalyticsAdapter';
+import TelemetryService from '@core/observability/services/TelemetryService';
+import { DummyAnalyticsAdapter } from '@core/observability/adapters/AnalyticsAdapter';
 import { getStateAdapter } from '@core/state/adapters';
 import { IStateAdapter } from '@core/state/interfaces/IStateAdapter';
 import { RootState } from '@core/state/redux/store';

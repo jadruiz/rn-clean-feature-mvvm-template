@@ -1,4 +1,4 @@
-// src/core/utils/performance/debounce.ts
+// src/common/helpers/performanceHelpers.ts
 
 /**
  * Retorna una versión debounced de la función dada, que se ejecutará

@@ -1,7 +1,7 @@
 // src/core/state/middlewares/telemetryMiddleware.ts
 import { Middleware } from '@reduxjs/toolkit';
 import { Action } from 'redux';
-import TelemetryService from '@core/telemetry/TelemetryService';
+import TelemetryService from '@core/observability/services/TelemetryService';
 
 export const telemetryMiddleware: Middleware =
   (store) => (next) => (action: unknown) => {

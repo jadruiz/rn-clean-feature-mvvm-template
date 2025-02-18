@@ -1,5 +1,5 @@
-// src/core/telemetry/TelemetryService.ts
-import { AnalyticsAdapter } from './AnalyticsAdapter';
+// src/core/observability/services/TelemetryService.ts
+import { AnalyticsAdapter } from '../adapters/AnalyticsAdapter';
 
 /**
  * TelemetryService es un servicio singleton para capturar y enviar datos

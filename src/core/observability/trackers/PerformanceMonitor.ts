@@ -1,7 +1,7 @@
-// src/core/observability/PerformanceMonitor.ts
+// src/core/observability/trackers/PerformanceMonitor.ts
 
 import { Logger, consoleAdapter, LogLevel } from '@core/logging';
-import TelemetryService from '@core/telemetry/TelemetryService';
+import TelemetryService from '@core/observability/services/TelemetryService';
 
 const logger = new Logger(consoleAdapter, LogLevel.INFO);
 

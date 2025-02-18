@@ -1,4 +1,4 @@
-// src/core/utils/helpers/stringUtils.ts
+// src/common/helpers/stringUtils.ts
 
 /**
  * Capitaliza la primera letra de una cadena.
