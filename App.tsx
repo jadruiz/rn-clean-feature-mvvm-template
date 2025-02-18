@@ -21,7 +21,7 @@ import GlobalErrorBoundary from '@presentation/components/GlobalErrorBoundary';
 import { initApp } from '@core/config/initApp';
 import { ThemeProvider, useTheme } from '@core/config/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
-import { useNetworkStatus } from '@common/hooks/useNetworkStatus';
+import { useNetworkStatus } from '@common/hooks';
 
 const AppContent = () => {
   const { t } = useTranslation();
