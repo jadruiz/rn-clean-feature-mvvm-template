@@ -18,9 +18,9 @@ import { ThemeProvider, useTheme } from '@core/config/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
 
 const AppContent = () => {
-  const { t } = useTranslation(); // Obtenemos la función de traducción
+  const { t } = useTranslation();
   const { screenReaderEnabled } = useA11yContext();
-  const { theme, toggleTheme } = useTheme(); // Usamos el hook del ThemeContext
+  const { theme, toggleTheme } = useTheme();
 
   const testEncryption = () => {
     try {

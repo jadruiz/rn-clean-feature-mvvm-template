@@ -1,7 +1,7 @@
+// src/core/config/environment/ConfigAdapter.ts
 import appConfig from '../../../../app.json';
 import { Logger, consoleAdapter, LogLevel } from '@core/logging';
 
-// Inicializamos el logger con el adaptador de consola
 const logger = new Logger(consoleAdapter, LogLevel.INFO);
 
 export class ConfigAdapter {
@@ -20,28 +20,44 @@ export class ConfigAdapter {
   }
 
   private loadConfig() {
+    // Configuración por defecto
     const defaultConfig = {
-      API_URL: 'https://fallback-url.com',
-      ENV: 'development',
-      APP_NAME: 'MyApp',
-      VERSION: '1.0.0',
-      SECRET_KEY: '',
+      API_URL: 'https://fallback-url.com', // Variable pública
+      ENV: 'development', // Variable pública
+      APP_NAME: 'MyApp', // Variable pública
+      VERSION: '1.0.0', // Variable pública
+      SECRET_KEY: '', // Variable privada
+      ENABLE_NEW_AUTH_FLOW: false, // Variable pública
+      ENABLE_ADVANCED_ANALYTICS: false, // Variable pública
     };
 
-    this.config.API_URL =
-      process.env.EXPO_PUBLIC_API_URL ?? defaultConfig.API_URL;
-    this.config.ENV = process.env.EXPO_PUBLIC_ENV ?? defaultConfig.ENV;
-    this.config.SECRET_KEY =
-      process.env.EXPO_PUBLIC_SECRET_KEY ?? defaultConfig.SECRET_KEY;
+    // Cargar configuración desde variables de entorno
+    this.config = {
+      // 🔹 Variables PÚBLICAS (Expo las expone automáticamente)
+      API_URL: process.env.EXPO_PUBLIC_API_URL || defaultConfig.API_URL,
+      ENV: process.env.EXPO_PUBLIC_ENV || defaultConfig.ENV,
+      APP_NAME: appConfig?.expo?.name || defaultConfig.APP_NAME,
+      VERSION: appConfig?.expo?.version || defaultConfig.VERSION,
+      ENABLE_NEW_AUTH_FLOW:
+        process.env.EXPO_PUBLIC_ENABLE_NEW_AUTH_FLOW === 'true'
+          ? true
+          : process.env.EXPO_PUBLIC_ENABLE_NEW_AUTH_FLOW === 'false'
+          ? false
+          : defaultConfig.ENABLE_NEW_AUTH_FLOW,
+      ENABLE_ADVANCED_ANALYTICS:
+        process.env.EXPO_PUBLIC_ENABLE_ADVANCED_ANALYTICS === 'true'
+          ? true
+          : process.env.EXPO_PUBLIC_ENABLE_ADVANCED_ANALYTICS === 'false'
+          ? false
+          : defaultConfig.ENABLE_ADVANCED_ANALYTICS,
 
-    this.config.APP_NAME = appConfig?.expo?.name ?? defaultConfig.APP_NAME;
-    this.config.VERSION = appConfig?.expo?.version ?? defaultConfig.VERSION;
+      // 🔒 Variables PRIVADAS (NO se exponen en el frontend)
+      SECRET_KEY: process.env.SECRET_KEY || defaultConfig.SECRET_KEY,
+    };
 
-    // Registrar configuración cargada
     logger.info('📢 Configuración cargada correctamente.', {
       config: this.config,
     });
-
     this.validateConfig();
   }
 
@@ -63,10 +79,12 @@ export class ConfigAdapter {
       'APP_NAME',
       'VERSION',
       'SECRET_KEY',
+      'ENABLE_NEW_AUTH_FLOW',
+      'ENABLE_ADVANCED_ANALYTICS',
     ];
 
     requiredKeys.forEach((key) => {
-      if (!this.config[key]) {
+      if (this.config[key] === undefined || this.config[key] === '') {
         logger.error(`❌ ERROR: Configuración faltante: "${key}"`, {
           config: this.config,
         });
@@ -76,3 +94,5 @@ export class ConfigAdapter {
     logger.info('✅ Validación de configuración completada.');
   }
 }
+
+export const Config = ConfigAdapter.getInstance();

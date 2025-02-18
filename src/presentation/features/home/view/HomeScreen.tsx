@@ -2,10 +2,10 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const RegisterScreen: React.FC = () => (
+const HomeScreen: React.FC = () => (
   <View>
-    <Text>Register Screen</Text>
+    <Text>Home Screen</Text>
   </View>
 );
 
-export default RegisterScreen;
+export default HomeScreen;

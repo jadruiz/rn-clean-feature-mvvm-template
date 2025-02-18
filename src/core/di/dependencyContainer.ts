@@ -1,20 +1,24 @@
 // src/core/di/dependencyContainer.ts
+import 'reflect-metadata';
 import { container } from 'tsyringe';
 
-// Importa tus servicios
+// Importa tus servicios existentes
 import { AuthService } from '@core/security/AuthService';
 import { EncryptionService } from '@core/security/EncryptionService';
 import { KeychainService } from '@core/security/KeychainService';
 
-// Aquí registras las dependencias que deseas inyectar
-// Para cada servicio, defines un "token" (por ejemplo, el nombre de la clase o un string)
+// Registro de servicios
 container.register<AuthService>('AuthService', { useClass: AuthService });
-container.register<EncryptionService>('EncryptionService', {
-  useClass: EncryptionService,
-});
-container.register<KeychainService>('KeychainService', {
-  useClass: KeychainService,
-});
+container.register<EncryptionService>('EncryptionService', { useClass: EncryptionService });
+container.register<KeychainService>('KeychainService', { useClass: KeychainService });
 
-// Exporta el contenedor para usarlo en otras partes de la aplicación
+// Registro de adaptadores de estado
+import { ReduxAdapter } from '@core/state/adapters/ReduxAdapter';
+import { MemoryAdapter } from '@core/state/adapters/MemoryAdapter';
+import { IStateAdapter } from '@core/state/interfaces/IStateAdapter';
+import { RootState } from '@core/state/redux/store';
+
+container.register<IStateAdapter<RootState>>('ReduxAdapter', { useClass: ReduxAdapter });
+container.register<IStateAdapter<RootState>>('MemoryAdapter', { useClass: MemoryAdapter });
+
 export { container };

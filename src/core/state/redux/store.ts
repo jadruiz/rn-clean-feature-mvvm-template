@@ -1,33 +1,24 @@
 // src/core/state/redux/store.ts
-import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IAppState } from '../interfaces/IAppState';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import authReducer from '../slices/authSlice';
+import { telemetryMiddleware } from '../middlewares/TelemetryMiddleware';
+import { Config } from '@core/config/environment/EnvConfig';
 
-// Estado inicial
-const initialState: IAppState = {
-  auth: {
-    user: '',
-    token: '',
-  },
-};
-
-// Slice de Redux
-const appSlice = createSlice({
-  name: 'app',
-  initialState,
-  reducers: {
-    setState: (state, action: PayloadAction<Partial<IAppState>>) => {
-      return { ...state, ...action.payload };
-    },
-  },
+// Combinar múltiples reducers
+const rootReducer = combineReducers({
+  auth: authReducer,
 });
 
-export const { setState } = appSlice.actions;
-
-// Crear el store
+// Configuración del store
 export const store = configureStore({
-  reducer: appSlice.reducer,
+  reducer: rootReducer,
+  devTools: Config.get<string>('ENV') !== 'production',
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(telemetryMiddleware),
 });
 
-// Definir RootState basado en el store
-export type RootState = ReturnType<typeof store.getState>;
+// Tipos derivados del store
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
