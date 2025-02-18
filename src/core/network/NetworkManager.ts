@@ -1,9 +1,10 @@
 // src/core/network/NetworkManager.ts
-import NetInfo from '@react-native-community/netinfo';
+import NetInfo, { NetInfoState } from '@react-native-community/netinfo';
 
 export class NetworkManager {
   /**
-   * Retorna un booleano indicando si el dispositivo está conectado a Internet.
+   * Verifica si el dispositivo está en línea.
+   * @returns {Promise<boolean>} `true` si hay conexión a Internet, `false` en caso contrario.
    */
   static async isOnline(): Promise<boolean> {
     const state = await NetInfo.fetch();
@@ -11,14 +12,31 @@ export class NetworkManager {
   }
 
   /**
-   * Permite suscribirse a cambios en la conectividad.
-   * @param callback Función a ejecutar cada vez que el estado de la red cambia.
-   * @returns Una función para cancelar la suscripción.
+   * Retorna el tipo de conexión actual (WiFi, Datos móviles, desconocido, etc.).
+   * @returns {Promise<string>} Tipo de conexión actual.
    */
-  static subscribe(callback: (isConnected: boolean) => void): () => void {
+  static async getConnectionType(): Promise<string> {
+    const state = await NetInfo.fetch();
+    return state.type; // Ejemplo: 'wifi', 'cellular', 'unknown', 'none'
+  }
+
+  /**
+   * Suscripción a cambios en el estado de la red.
+   * @param callback Función a ejecutar cuando la conectividad cambia.
+   * @returns Función para cancelar la suscripción.
+   */
+  static subscribe(callback: (state: NetInfoState) => void): () => void {
     const unsubscribe = NetInfo.addEventListener((state) => {
-      callback(state.isConnected ?? false);
+      callback(state);
     });
     return unsubscribe;
+  }
+
+  /**
+   * Retorna información detallada sobre la conexión de red.
+   * @returns {Promise<NetInfoState>} Objeto con información detallada.
+   */
+  static async getNetworkInfo(): Promise<NetInfoState> {
+    return await NetInfo.fetch();
   }
 }
