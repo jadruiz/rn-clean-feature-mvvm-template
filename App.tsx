@@ -3,10 +3,10 @@ import 'react-native-get-random-values';
 import React, { useEffect, useState } from 'react';
 import 'reflect-metadata';
 import { Text, View, StyleSheet, Button, Alert, ActivityIndicator } from 'react-native';
-import { Config } from '@core/config/environment/EnvConfig';
-import { I18nextProvider, useTranslation } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 import i18n from '@core/i18n/i18n';
 import LanguageSwitcher from '@core/i18n/LanguageSwitcher';
+import { Config } from '@core/config/environment/EnvConfig';
 import { EncryptionService } from '@core/security/EncryptionService';
 import { AccessibilityHelper } from '@core/a11y/AccessibilityHelper';
 import { useA11yContext, A11yProvider } from '@core/a11y/A11yContext';
@@ -14,10 +14,13 @@ import GlobalErrorBoundary from '@presentation/components/GlobalErrorBoundary';
 import { initApp } from '@core/config/initApp';
 import { IStateAdapter } from '@core/state/interfaces/IStateAdapter';
 import { RootState } from '@core/state/redux/store';
+import { ThemeProvider, useTheme } from '@core/config/theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const AppContent = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(); // Obtenemos la función de traducción
   const { screenReaderEnabled } = useA11yContext();
+  const { theme, toggleTheme } = useTheme(); // Usamos el hook del ThemeContext
 
   const testEncryption = () => {
     try {
@@ -35,13 +38,19 @@ const AppContent = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>API URL: {Config.get<string>('API_URL')}</Text>
-      {screenReaderEnabled && <Text style={styles.a11yText}>Lector de pantalla activo</Text>}
-      <Button title="Test Encryption" onPress={testEncryption} />
-      {/* Agregamos el LanguageSwitcher para permitir cambiar de idioma en la UI */}
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <Text style={[styles.text, { color: theme.colors.text }]}>
+        API URL: {Config.get<string>('API_URL')}
+      </Text>
+      {screenReaderEnabled && (
+        <Text style={[styles.a11yText, { color: theme.colors.primary }]}>
+          Lector de pantalla activo
+        </Text>
+      )}
+      <Button title="Test Encryption" onPress={testEncryption} color={theme.colors.primary} />
       <LanguageSwitcher />
-      <Text>{t('welcome')}</Text>
+      <Text style={[styles.welcomeText, { color: theme.colors.text }]}>{t('welcome')}</Text>
+      <Button title="Toggle Theme" onPress={toggleTheme} color={theme.colors.secondary} />
     </View>
   );
 };
@@ -64,7 +73,6 @@ const App = () => {
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#007AFF" />
         <Text style={styles.loadingText}>Cargando aplicación...</Text>
-        {/* Opcional: Si deseas cambiar de idioma incluso durante el loading */}
         <LanguageSwitcher />
       </View>
     );
@@ -74,7 +82,9 @@ const App = () => {
     <GlobalErrorBoundary>
       <I18nextProvider i18n={i18n}>
         <A11yProvider>
-          <AppContent />
+          <ThemeProvider>
+            <AppContent />
+          </ThemeProvider>
         </A11yProvider>
       </I18nextProvider>
     </GlobalErrorBoundary>
@@ -86,19 +96,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
     padding: 20,
   },
   text: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
     marginBottom: 10,
   },
   a11yText: {
     fontSize: 16,
-    color: '#007AFF',
     marginVertical: 10,
+  },
+  welcomeText: {
+    fontSize: 20,
+    marginTop: 20,
   },
   loadingContainer: {
     flex: 1,
@@ -107,7 +118,6 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#007AFF',
     marginTop: 10,
   },
 });
