@@ -1,7 +1,7 @@
 // src/core/hooks/useNetworkStatus.ts
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import { NetworkManager } from '@core/network/NetworkManager';
+import { NetworkManager } from '@infrastructure/network/NetworkManager';
 import { NetInfoState } from '@react-native-community/netinfo';
 
 export const useNetworkStatus = () => {

@@ -1,5 +1,5 @@
 // src/core/infrastructure/data/ApiSource.ts
-import { NetworkManager } from '@core/network/NetworkManager';
+import { NetworkManager } from '@infrastructure/network/NetworkManager';
 
 export class ApiSource {
   async fetchData(endpoint: string): Promise<any> {
