@@ -8,29 +8,32 @@ import { getStateAdapter } from '@core/state/adapters';
 import { IStateAdapter } from '@core/state/interfaces/IStateAdapter';
 import { RootState } from '@core/state/redux/store';
 import { EncryptionService } from '@core/security/EncryptionService';
+import { SQLiteAuthStorage } from '@infrastructure/storage/SQLiteAuthStorage';
 
-/**
- * Inicializa la aplicación: configura telemetría, logging, encriptación y el estado global.
- */
+const logger = new Logger(consoleAdapter, LogLevel.DEBUG);
+
 export const initApp = async (): Promise<{
   stateAdapter: IStateAdapter<RootState>;
 } | null> => {
   try {
-    // 🔹 Inicializa Telemetría
+    // Inicializa la base de datos SQLite (crea tablas y ejecuta migraciones)
+    SQLiteAuthStorage.init();
+    logger.info('SQLite: Base de datos inicializada');
+
+    // Inicializa Telemetría
     TelemetryService.initialize(new DummyAnalyticsAdapter());
     TelemetryService.getInstance().logEvent('AppStarted', {
       timestamp: new Date().toISOString(),
     });
 
-    // 🔹 Inicializa Logger
-    const logger = new Logger(consoleAdapter, LogLevel.DEBUG);
+    // Inicializa Logger
     logger.info('📢 Aplicación inicializada correctamente');
 
-    // 🔹 Inicializa Encriptación (clave secreta)
+    // Inicializa Encriptación (clave secreta)
     await EncryptionService.initSecretKey();
     logger.info('🔐 Clave secreta inicializada');
 
-    // 🔹 Cargar Adaptador de Estado (Redux o In-Memory)
+    // Cargar Adaptador de Estado (por ejemplo, Redux o MemoryAdapter)
     const stateAdapter = await getStateAdapter();
     logger.info(`🗄 Estado inicializado con: ${stateAdapter.constructor.name}`);
 

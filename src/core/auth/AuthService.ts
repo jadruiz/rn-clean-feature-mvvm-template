@@ -1,16 +1,15 @@
 // src/core/auth/AuthService.ts
+import { injectable } from 'tsyringe';
 import { User } from '@domain/entities/User';
 import { IAuthRepository } from '@domain/repositories/IAuthRepository';
-import { SecureStore } from './SecureStore';
-import { SessionManager } from './SessionManager';
-// Importa Logger y LogLevel desde la ruta centralizada de logging
+import { SecureStore } from '@core/auth/SecureStore';
+import { SessionManager } from '@core/auth/SessionManager';
 import { Logger, LogLevel } from '@core/logging/Logger';
-// Importa el adaptador de consola, que ya está configurado
 import { consoleAdapter } from '@core/logging/adapters/consoleAdapter';
 
-// Instancia global del logger para esta clase
 const logger = new Logger(consoleAdapter, LogLevel.DEBUG);
 
+@injectable()
 export class AuthService {
   private authRepository: IAuthRepository;
 

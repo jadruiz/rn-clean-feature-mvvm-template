@@ -1,7 +1,7 @@
 ```Bash
 ├── 📄  env.example                                                                                                             
 ├── 📄 .env.development                                                                                                         
-├── 📄 .eslintrcjs                                                                                                             
+├── 📄 .eslintrc.js                                                                                                             
 ├── 📄 .prettierrc                                                                                                              
 ├── 📄 App.tsx                                                                                                                  
 ├── 📄 LICENSE                                                                                                                  

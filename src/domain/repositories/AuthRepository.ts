@@ -4,41 +4,59 @@ import {
   PendingOperation,
 } from '@domain/repositories/IAuthRepository';
 import { User } from '@domain/entities/User';
-import { LocalAuthStorage } from '@infrastructure/storage/LocalAuthStorage';
+import { SQLiteAuthStorage } from '@infrastructure/storage/SQLiteAuthStorage';
+import { Logger, LogLevel } from '@core/logging/Logger';
+import { consoleAdapter } from '@core/logging/adapters/consoleAdapter';
+
+const logger = new Logger(consoleAdapter, LogLevel.DEBUG);
 
 export class AuthRepository implements IAuthRepository {
   /**
-   * Guarda la información de autenticación del usuario utilizando el servicio de almacenamiento local.
+   * Guarda la información del usuario utilizando SQLiteAuthStorage.
    */
   async saveUser(user: User): Promise<void> {
-    await LocalAuthStorage.persistUser(user);
+    await SQLiteAuthStorage.persistUser(user);
+    logger.info('AuthRepository: Usuario guardado en SQLite');
   }
 
   /**
-   * Recupera la información de autenticación del usuario del almacenamiento local.
+   * Recupera el usuario almacenado.
    */
   async getUser(): Promise<User | null> {
-    return await LocalAuthStorage.retrieveUser();
+    const user = await SQLiteAuthStorage.retrieveUser();
+    logger.info('AuthRepository: Usuario recuperado de SQLite', user);
+    return user;
   }
 
   /**
-   * Elimina la información de autenticación del usuario del almacenamiento local.
+   * Elimina el usuario almacenado.
    */
   async removeUser(): Promise<void> {
-    await LocalAuthStorage.clearUser();
+    await SQLiteAuthStorage.clearUser();
+    logger.info('AuthRepository: Usuario eliminado de SQLite');
   }
 
   /**
-   * Opcional: Permite procesar en lote operaciones pendientes.
-   * Este método se utilizaría en la sincronización offline.
+   * Autentica a un usuario utilizando SQLiteAuthStorage.
+   * Se busca un usuario que coincida con el username y password proporcionados.
+   */
+  async authenticate(username: string, password: string): Promise<User | null> {
+    const user = await SQLiteAuthStorage.authenticateUser(username, password);
+    logger.info('AuthRepository: Resultado de la autenticación', user);
+    return user;
+  }
+
+  /**
+   * Procesa en lote las operaciones pendientes (por ejemplo, operaciones de login en modo offline).
    */
   async batchProcess(operations: PendingOperation[]): Promise<void> {
-    // Aquí podrías iterar sobre las operaciones y procesarlas.
-    // Por ejemplo, si cada operación es de tipo 'LOGIN', podrías reintentar el login con esos datos.
-    // En este ejemplo, simplemente se simula el procesamiento.
     for (const op of operations) {
-      console.log(`Procesando operación: ${op.type}`, op.payload);
-      // Lógica de procesamiento...
+      logger.info(
+        `AuthRepository: Procesando operación "${op.type}"`,
+        op.payload,
+      );
+      // Aquí implementarías la lógica para reejecutar la operación pendiente.
     }
+    logger.info('AuthRepository: Batch processing completado.');
   }
 }
