@@ -21,8 +21,13 @@ export class OfflineAuthSync {
     if (pendingOps.length === 0) return;
 
     try {
-      // Se procesan las operaciones pendientes (batchProcess es un método que debe implementarse en el repositorio)
-      await this.authRepository.batchProcess(pendingOps);
+      if (this.authRepository.batchProcess) {
+        // Solo se invoca si batchProcess está definido
+        await this.authRepository.batchProcess(pendingOps);
+      } else {
+        throw new Error('batchProcess no está implementado en el repositorio.');
+      }
+
       // Si la sincronización es exitosa, se limpia la cola de operaciones pendientes.
       await LocalAuthStorage.clearPendingOperations();
       console.log('Operaciones pendientes sincronizadas correctamente.');
