@@ -1,4 +1,5 @@
 // src/core/state/adapters/MemoryAdapter.ts
+import { injectable } from 'tsyringe';
 import { IStateAdapter } from '../interfaces/IStateAdapter';
 import { IAppState } from '../interfaces/IAppState';
 
@@ -7,6 +8,7 @@ let memoryState: IAppState = {
   auth: { user: '', token: '' },
 };
 
+@injectable()
 export class MemoryAdapter implements IStateAdapter<IAppState> {
   private listeners: Array<(state: IAppState) => void> = [];
 

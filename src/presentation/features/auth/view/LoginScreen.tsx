@@ -1,38 +1,32 @@
 // src/presentation/features/auth/view/LoginScreen.tsx
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   View,
   Text,
   TextInput,
   Button,
-  StyleSheet,
   ActivityIndicator,
+  StyleSheet,
 } from 'react-native';
 import { useLoginViewModel } from '@presentation/features/auth/viewModel/LoginViewModel';
-import { LoginUseCase } from '@domain/useCases/LoginUseCase';
-import { SyncAuthUseCase } from '@domain/useCases/SyncAuthUseCase';
-import { AuthRepository } from '@domain/repositories/AuthRepository';
+import { AuthService } from '@core/auth/AuthService';
+import { SQLiteAuthRepository } from '@infrastructure/data/repositories/SQLiteAuthRepository';
 
-// Instanciar los casos de uso utilizando el repositorio (puedes inyectarlos con un contenedor DI en el futuro)
-const authRepository = new AuthRepository();
-const loginUseCase = new LoginUseCase(authRepository);
-const syncAuthUseCase = new SyncAuthUseCase(authRepository);
+// Se crea una instancia del repositorio e inyecta el AuthService.
+// En una implementación real, podrías inyectar estas dependencias mediante un contenedor de DI.
+const authRepository = new SQLiteAuthRepository();
+const authService = new AuthService(authRepository);
 
 const LoginScreen: React.FC = () => {
-  const { user, loading, error, login, syncAuth } = useLoginViewModel(
-    loginUseCase,
-    syncAuthUseCase,
-  );
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  // Ejemplo: Si el usuario se autentica, podrías navegar a la pantalla principal
-  useEffect(() => {
-    if (user) {
-      console.log('Usuario autenticado:', user);
-      // Aquí se puede usar NavigationService o un hook de navegación para redirigir al Home.
-    }
-  }, [user]);
+  const {
+    username,
+    setUsername,
+    password,
+    setPassword,
+    isLoading,
+    error,
+    login,
+  } = useLoginViewModel(authService);
 
   return (
     <View style={styles.container}>
@@ -42,21 +36,21 @@ const LoginScreen: React.FC = () => {
         placeholder="Usuario"
         value={username}
         onChangeText={setUsername}
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
         placeholder="Contraseña"
-        secureTextEntry
         value={password}
         onChangeText={setPassword}
+        secureTextEntry
       />
       {error && <Text style={styles.error}>{error}</Text>}
-      {loading ? (
+      {isLoading ? (
         <ActivityIndicator size="large" color="#007AFF" />
       ) : (
-        <Button title="Ingresar" onPress={() => login(username, password)} />
+        <Button title="Entrar" onPress={login} />
       )}
-      <Button title="Sincronizar" onPress={syncAuth} color="#007AFF" />
     </View>
   );
 };
@@ -66,20 +60,22 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#F5F5F5',
   },
   title: {
     fontSize: 24,
-    marginBottom: 16,
+    marginBottom: 24,
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   input: {
     height: 48,
     borderColor: '#ccc',
     borderWidth: 1,
     marginBottom: 12,
-    paddingHorizontal: 8,
+    paddingHorizontal: 12,
     borderRadius: 4,
+    backgroundColor: '#fff',
   },
   error: {
     color: 'red',

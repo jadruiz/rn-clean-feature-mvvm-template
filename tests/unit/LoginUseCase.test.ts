@@ -18,7 +18,22 @@ class DummyAuthRepository implements IAuthRepository {
     this.user = null;
   }
 
-  // Implementación opcional de batchProcess para pruebas, si se necesita
+  async authenticate(username: string, password: string): Promise<User | null> {
+    // Para el dummy, se puede devolver el usuario si coincide con algún dato dummy
+    // O simplemente retornar null o un usuario dummy
+    // Aquí retornaremos un usuario dummy si las credenciales son 'dummy'
+    if (username === 'dummy' && password === 'dummy') {
+      return {
+        id: 'dummy-id',
+        username,
+        token: 'dummy-token',
+        timestamp: Date.now(),
+      };
+    }
+    return null;
+  }
+
+  // Implementación dummy de batchProcess
   async batchProcess(operations: any[]): Promise<void> {
     // Simulación: se asume que las operaciones se procesan correctamente
     return;

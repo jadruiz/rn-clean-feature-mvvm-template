@@ -1,73 +1,62 @@
 // src/core/auth/AuthProvider.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@domain/entities/User';
-import { NetworkObserver } from '@infrastructure/network/NetworkObserver';
-import { OfflineAuthSync } from './OfflineAuthSync';
-import { AuthRepository } from '@infrastructure/data/repositories/AuthRepository';
+import { AuthService } from '@core/auth/AuthService';
+import { SQLiteAuthRepository } from '@infrastructure/data/repositories/SQLiteAuthRepository';
+import { SessionManager } from '@core/auth/SessionManager';
 
-interface AuthContextData {
+// Define la interfaz del contexto de autenticación
+interface AuthContextType {
   user: User | null;
   login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
-// Definimos una interfaz para las props del AuthProvider
-interface AuthProviderProps {
-  children: React.ReactNode;
-}
+// Crea el contexto con valores por defecto
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  login: async () => {},
+  logout: async () => {},
+});
 
-const AuthContext = createContext<AuthContextData | undefined>(undefined);
+// Hook para acceder al contexto de autenticación
+export const useAuthContext = () => useContext(AuthContext);
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+// Componente Provider que gestiona el estado de autenticación
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  // Instanciar el repositorio y el OfflineAuthSync
-  const authRepository = new AuthRepository();
-  const offlineAuthSync = new OfflineAuthSync(authRepository);
-  const networkObserver = new NetworkObserver();
+  // Instancia del repositorio y servicio de autenticación
+  const authRepository = new SQLiteAuthRepository();
+  const authService = new AuthService(authRepository);
 
-  // Suscribirse a cambios de conectividad para sincronizar autenticación
-  useEffect(() => {
-    const unsubscribe = networkObserver.subscribe((isOnline: boolean) => {
-      if (isOnline) {
-        offlineAuthSync.syncPendingOperations().catch((error) => {
-          console.error('Error sincronizando autenticación offline:', error);
-        });
-      }
-    });
-    return () => unsubscribe();
-  }, [networkObserver, offlineAuthSync]);
-
+  // Función para iniciar sesión
   const login = async (username: string, password: string) => {
-    // Aquí se debería llamar a AuthService.login en una implementación real.
-    // Para simplificar, asignamos un usuario dummy y se podría agregar la operación pendiente.
-    const dummyUser: User = {
-      id: 'user123',
-      username,
-      token: 'dummy-token',
-      timestamp: Date.now(),
-    };
-    setUser(dummyUser);
-    // Aquí podrías persistir la operación de login para sincronización offline:
-    // await LocalAuthStorage.enqueueOperation({ type: 'LOGIN', payload: dummyUser, timestamp: Date.now() });
+    const loggedUser = await authService.login(username, password);
+    setUser(loggedUser);
   };
 
+  // Función para cerrar sesión
   const logout = async () => {
+    await authService.logout();
     setUser(null);
-    // Aquí también podrías limpiar datos persistidos si es necesario.
   };
+
+  // Al montar el proveedor, se intenta cargar el usuario persistido (si existe)
+  useEffect(() => {
+    const loadUser = async () => {
+      const storedUser = await authRepository.getUser();
+      if (storedUser) {
+        setUser(storedUser);
+        SessionManager.startSession(storedUser);
+      }
+    };
+    loadUser();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuthContext = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuthContext must be used within an AuthProvider');
-  }
-  return context;
 };

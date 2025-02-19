@@ -3,29 +3,31 @@ import { User } from '@domain/entities/User';
 
 export interface IAuthRepository {
   /**
-   * Guarda la información de autenticación del usuario.
+   * Guarda el usuario en el almacenamiento
    */
   saveUser(user: User): Promise<void>;
 
   /**
-   * Recupera la información de autenticación del usuario, si existe.
+   * Obtiene el usuario almacenado
    */
   getUser(): Promise<User | null>;
 
   /**
-   * Elimina la información de autenticación del usuario.
+   * Elimina el usuario almacenado
    */
   removeUser(): Promise<void>;
 
   /**
-   * Opcional: Permite procesar en lote operaciones pendientes para sincronización.
+   * Autentica a un usuario validando el nombre de usuario y contraseña.
+   */
+  authenticate(username: string, password: string): Promise<User | null>;
+
+  /**
+   * Procesa operaciones pendientes.
    */
   batchProcess?(operations: PendingOperation[]): Promise<void>;
 }
 
-/**
- * Tipo para definir una operación pendiente (por ejemplo, un login pendiente).
- */
 export interface PendingOperation {
   type: string;
   payload: any;

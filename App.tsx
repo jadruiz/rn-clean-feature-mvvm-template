@@ -1,8 +1,8 @@
 // App.jsx
 import 'reflect-metadata';
-import 'react-native-get-random-values';
+//import 'react-native-get-random-values';
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@core/i18n/i18n';
 import GlobalErrorBoundary from '@presentation/components/GlobalErrorBoundary';
@@ -15,7 +15,6 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Inicializa servicios críticos: telemetría, logging, encriptación, etc.
     initApp()
       .then(() => setLoading(false))
       .catch((error) => {

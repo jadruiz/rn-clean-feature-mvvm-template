@@ -1,64 +1,100 @@
 // src/infrastructure/storage/LocalAuthStorage.ts
-import { AsyncStorageService } from './AsyncStorageService';
-import { User } from '@domain/entities/User';
-import { PendingOperation } from '@domain/repositories/IAuthRepository';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Logger, LogLevel } from '@core/logging/Logger';
 import { consoleAdapter } from '@core/logging/adapters/consoleAdapter';
+import { User } from '@domain/entities/User';
+import { PendingOperation } from '@domain/repositories/IAuthRepository';
 
 const logger = new Logger(consoleAdapter, LogLevel.DEBUG);
-
 const USER_KEY = 'auth_user';
 const PENDING_OPS_KEY = 'pending_auth_operations';
 
 export class LocalAuthStorage {
-  // Guarda el usuario en el almacenamiento local.
+  /**
+   * Persiste el usuario en AsyncStorage.
+   */
   static async persistUser(user: User): Promise<void> {
-    await AsyncStorageService.setItem(USER_KEY, user);
-    logger.info('LocalAuthStorage: Usuario persistido.');
+    try {
+      await AsyncStorage.setItem(USER_KEY, JSON.stringify(user));
+      logger.info('LocalAuthStorage: Usuario persistido.');
+    } catch (error) {
+      logger.error('LocalAuthStorage: Error al persistir usuario', error);
+      throw error;
+    }
   }
 
-  // Recupera el usuario almacenado.
+  /**
+   * Recupera el usuario almacenado en AsyncStorage.
+   */
   static async retrieveUser(): Promise<User | null> {
-    const user = await AsyncStorageService.getItem<User>(USER_KEY);
-    logger.info('LocalAuthStorage: Usuario recuperado.');
-    return user;
+    try {
+      const userString = await AsyncStorage.getItem(USER_KEY);
+      if (userString) {
+        const user: User = JSON.parse(userString);
+        logger.info('LocalAuthStorage: Usuario recuperado.');
+        return user;
+      }
+      return null;
+    } catch (error) {
+      logger.error('LocalAuthStorage: Error al recuperar usuario', error);
+      throw error;
+    }
   }
 
-  // Elimina el usuario almacenado.
+  /**
+   * Elimina el usuario almacenado en AsyncStorage.
+   */
   static async clearUser(): Promise<void> {
-    await AsyncStorageService.removeItem(USER_KEY);
-    logger.info('LocalAuthStorage: Usuario eliminado.');
+    try {
+      await AsyncStorage.removeItem(USER_KEY);
+      logger.info('LocalAuthStorage: Usuario eliminado.');
+    } catch (error) {
+      logger.error('LocalAuthStorage: Error al eliminar usuario', error);
+      throw error;
+    }
   }
 
-  // Encola una operación pendiente para sincronización (por ejemplo, login pendiente).
+  /**
+   * Encola una operación pendiente para sincronización.
+   */
   static async enqueueOperation(operation: PendingOperation): Promise<void> {
-    const currentOps =
-      (await AsyncStorageService.getItem<PendingOperation[]>(
-        PENDING_OPS_KEY,
-      )) || [];
-    currentOps.push(operation);
-    await AsyncStorageService.setItem(PENDING_OPS_KEY, currentOps);
-    logger.info(
-      `LocalAuthStorage: Operación pendiente "${operation.type}" encolada.`,
-    );
+    try {
+      const opsString = await AsyncStorage.getItem(PENDING_OPS_KEY);
+      const currentOps: PendingOperation[] = opsString ? JSON.parse(opsString) : [];
+      currentOps.push(operation);
+      await AsyncStorage.setItem(PENDING_OPS_KEY, JSON.stringify(currentOps));
+      logger.info(`LocalAuthStorage: Operación pendiente "${operation.type}" encolada.`);
+    } catch (error) {
+      logger.error('LocalAuthStorage: Error encolando operación pendiente', error);
+      throw error;
+    }
   }
 
-  // Recupera las operaciones pendientes de sincronización.
+  /**
+   * Recupera todas las operaciones pendientes.
+   */
   static async getPendingOperations(): Promise<PendingOperation[]> {
-    const ops = await AsyncStorageService.getItem<PendingOperation[]>(
-      PENDING_OPS_KEY,
-    );
-    logger.info(
-      `LocalAuthStorage: Se recuperaron ${
-        ops ? ops.length : 0
-      } operación(es) pendiente(s).`,
-    );
-    return ops || [];
+    try {
+      const opsString = await AsyncStorage.getItem(PENDING_OPS_KEY);
+      const ops: PendingOperation[] = opsString ? JSON.parse(opsString) : [];
+      logger.info(`LocalAuthStorage: Se recuperaron ${ops.length} operación(es) pendiente(s).`);
+      return ops;
+    } catch (error) {
+      logger.error('LocalAuthStorage: Error al recuperar operaciones pendientes', error);
+      throw error;
+    }
   }
 
-  // Limpia la cola de operaciones pendientes.
+  /**
+   * Limpia la cola de operaciones pendientes.
+   */
   static async clearPendingOperations(): Promise<void> {
-    await AsyncStorageService.removeItem(PENDING_OPS_KEY);
-    logger.info('LocalAuthStorage: Cola de operaciones pendientes limpiada.');
+    try {
+      await AsyncStorage.removeItem(PENDING_OPS_KEY);
+      logger.info('LocalAuthStorage: Cola de operaciones pendientes limpiada.');
+    } catch (error) {
+      logger.error('LocalAuthStorage: Error al limpiar operaciones pendientes', error);
+      throw error;
+    }
   }
 }
