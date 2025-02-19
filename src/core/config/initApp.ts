@@ -30,7 +30,7 @@ export const initApp = async (): Promise<{
     await EncryptionService.initSecretKey();
     logger.info('🔐 Clave secreta inicializada');
 
-    // 🔹 Cargar Adaptador de Estado (Redux o In-Memory)
+    // 🔹 Cargar Adaptador de Estado
     const stateAdapter = await getStateAdapter();
     logger.info(`🗄 Estado inicializado con: ${stateAdapter.constructor.name}`);
 

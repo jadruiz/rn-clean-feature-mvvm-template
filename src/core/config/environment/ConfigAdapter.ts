@@ -10,6 +10,9 @@ export class ConfigAdapter {
 
   private constructor() {
     this.loadConfig();
+    logger.info(
+      'EXPO_PUBLIC_STATE_ADAPTER: ' + process.env.EXPO_PUBLIC_STATE_ADAPTER,
+    );
   }
 
   public static getInstance(): ConfigAdapter {
@@ -27,15 +30,17 @@ export class ConfigAdapter {
       APP_NAME: 'MyApp',
       VERSION: '1.0.0',
       SECRET_KEY: '',
+      STATE_ADAPTER: 'redux',
       ENABLE_NEW_AUTH_FLOW: false,
       ENABLE_ADVANCED_ANALYTICS: false,
     };
 
     // Cargar configuración desde variables de entorno
     this.config = {
-      // 🔹 Variables PÚBLICAS (Expo las expone automáticamente)
       API_URL: process.env.EXPO_PUBLIC_API_URL || defaultConfig.API_URL,
       ENV: process.env.EXPO_PUBLIC_ENV || defaultConfig.ENV,
+      STATE_ADAPTER:
+        process.env.EXPO_PUBLIC_STATE_ADAPTER || defaultConfig.STATE_ADAPTER,
       APP_NAME: appConfig?.expo?.name || defaultConfig.APP_NAME,
       VERSION: appConfig?.expo?.version || defaultConfig.VERSION,
       ENABLE_NEW_AUTH_FLOW:
@@ -50,9 +55,8 @@ export class ConfigAdapter {
           : process.env.EXPO_PUBLIC_ENABLE_ADVANCED_ANALYTICS === 'false'
           ? false
           : defaultConfig.ENABLE_ADVANCED_ANALYTICS,
-
-      // 🔒 Variables PRIVADAS (NO se exponen en el frontend)
-      SECRET_KEY: process.env.EXPO_PUBLIC_SECRET_KEY || defaultConfig.SECRET_KEY,
+      SECRET_KEY:
+        process.env.EXPO_PUBLIC_SECRET_KEY || defaultConfig.SECRET_KEY,
     };
 
     logger.info('📢 Configuración cargada correctamente.', {

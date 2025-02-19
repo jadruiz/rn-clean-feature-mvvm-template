@@ -21,7 +21,7 @@ const loadAdapter = async (adapter: 'redux' | 'memory'): Promise<IStateAdapter<R
 };
 
 // 🔹 Obtener tipo de adaptador desde configuración (con fallback a 'redux')
-const adapterType = Config.get<'redux' | 'memory'>('EXPO_PUBLIC_STATE_ADAPTER') ?? 'memory';
+const adapterType = Config.get<'redux' | 'memory'>('STATE_ADAPTER') ?? 'memory';
 
 // 🔹 Función principal para obtener el adaptador de estado
 export const getStateAdapter = async (): Promise<IStateAdapter<RootState>> => {
