@@ -14,6 +14,8 @@
     "resolveJsonModule": true, // Permite importar archivos JSON
     "strict": true, // Habilita todas las reglas estrictas de TypeScript
     "baseUrl": "./src", // Define la base para los imports relativos
+    "experimentalDecorators": true, // permite que TypeScript emita metadatos adicionales durante la compilación para resolver las dependencias
+    "emitDecoratorMetadata": true, // habilita el soporte para los decoradores en TypeScript
     "paths": {
       // Alias para importaciones más limpias
       "@assets/*": ["../assets/*"],

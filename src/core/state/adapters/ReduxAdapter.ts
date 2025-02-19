@@ -1,8 +1,10 @@
 // src/core/state/adapters/ReduxAdapter.ts
+import { injectable } from 'tsyringe';
 import { store } from '../redux/store';
 import { IStateAdapter } from '../interfaces/IStateAdapter';
 import { RootState } from '../redux/store';
 
+@injectable()
 export class ReduxAdapter implements IStateAdapter<RootState> {
   getState(): RootState {
     return store.getState();

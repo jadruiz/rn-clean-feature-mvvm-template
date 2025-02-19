@@ -1,7 +1,10 @@
-// src/infrastructure/repositories/AuthRepository.ts
-import { IAuthRepository, PendingOperation } from '@domain/repositories/IAuthRepository';
+// src/infrastructure/data/repositories/AuthRepository.ts
+import {
+  IAuthRepository,
+  PendingOperation,
+} from '@domain/repositories/IAuthRepository';
 import { User } from '@domain/entities/User';
-import { LocalAuthStorage } from '@infrastructure/storage/LocalAuthStorage';
+import { SQLiteAuthStorage } from '@infrastructure/storage/SQLiteAuthStorage';
 import { Logger, LogLevel } from '@core/logging/Logger';
 import { consoleAdapter } from '@core/logging/adapters/consoleAdapter';
 
@@ -9,40 +12,50 @@ const logger = new Logger(consoleAdapter, LogLevel.DEBUG);
 
 export class AuthRepository implements IAuthRepository {
   /**
-   * Guarda la información de autenticación del usuario utilizando el servicio de almacenamiento local.
+   * Guarda la información del usuario utilizando SQLiteAuthStorage.
    */
   async saveUser(user: User): Promise<void> {
-    await LocalAuthStorage.persistUser(user);
-    logger.info('AuthRepository: Usuario guardado.');
+    await SQLiteAuthStorage.persistUser(user);
+    logger.info('AuthRepository: Usuario guardado en SQLite');
   }
 
   /**
-   * Recupera la información de autenticación del usuario del almacenamiento local.
+   * Recupera el usuario almacenado.
    */
   async getUser(): Promise<User | null> {
-    const user = await LocalAuthStorage.retrieveUser();
-    logger.info('AuthRepository: Usuario recuperado.');
+    const user = await SQLiteAuthStorage.retrieveUser();
+    logger.info('AuthRepository: Usuario recuperado de SQLite', user);
     return user;
   }
 
   /**
-   * Elimina la información de autenticación del usuario del almacenamiento local.
+   * Elimina el usuario almacenado.
    */
   async removeUser(): Promise<void> {
-    await LocalAuthStorage.clearUser();
-    logger.info('AuthRepository: Usuario eliminado.');
+    await SQLiteAuthStorage.clearUser();
+    logger.info('AuthRepository: Usuario eliminado de SQLite');
   }
 
   /**
-   * Opcional: Procesa en lote las operaciones pendientes.
-   * Aquí puedes implementar la lógica para reintentar operaciones de login, etc.
+   * Autentica a un usuario validando username y password.
+   */
+  async authenticate(username: string, password: string): Promise<User | null> {
+    const user = await SQLiteAuthStorage.authenticateUser(username, password);
+    logger.info('AuthRepository: Resultado de la autenticación', user);
+    return user;
+  }
+
+  /**
+   * Procesa en lote las operaciones pendientes.
    */
   async batchProcess(operations: PendingOperation[]): Promise<void> {
     for (const op of operations) {
-      logger.info(`AuthRepository: Procesando operación "${op.type}" con payload:`, op.payload);
-      // Aquí implementa la lógica para procesar cada operación.
-      // Por ejemplo, si la operación es de tipo 'LOGIN', intenta reejecutar el login.
+      logger.info(
+        `AuthRepository: Procesando operación "${op.type}"`,
+        op.payload,
+      );
+      // Aquí implementarías la lógica para reejecutar la operación pendiente.
     }
-    logger.info('AuthRepository: Todas las operaciones pendientes fueron procesadas.');
+    logger.info('AuthRepository: Batch processing completado.');
   }
 }

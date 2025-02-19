@@ -26,7 +26,9 @@ export class ConfigAdapter {
       ENV: 'development',
       APP_NAME: 'MyApp',
       VERSION: '1.0.0',
+      STATE_ADAPTER:'redux',
       SECRET_KEY: '',
+      DB_NAME: 'default_rncfm.db',
       ENABLE_NEW_AUTH_FLOW: false,
       ENABLE_ADVANCED_ANALYTICS: false,
     };
@@ -36,6 +38,8 @@ export class ConfigAdapter {
       // 🔹 Variables PÚBLICAS (Expo las expone automáticamente)
       API_URL: process.env.EXPO_PUBLIC_API_URL || defaultConfig.API_URL,
       ENV: process.env.EXPO_PUBLIC_ENV || defaultConfig.ENV,
+      DB_NAME: process.env.EXPO_PUBLIC_DB_NAME || defaultConfig.DB_NAME,
+      STATE_ADAPTER: process.env.EXPO_PUBLIC_STATE_ADAPTER || defaultConfig.STATE_ADAPTER,
       APP_NAME: appConfig?.expo?.name || defaultConfig.APP_NAME,
       VERSION: appConfig?.expo?.version || defaultConfig.VERSION,
       ENABLE_NEW_AUTH_FLOW:
