@@ -1,75 +1,137 @@
-# 🛠 Configuración y Setup del Proyecto
+# 🛠 Configuración de Variables de Entorno
 
-Este documento describe la configuración inicial del proyecto y las buenas prácticas aplicadas para garantizar modularidad, escalabilidad y mantenimiento eficiente.
-
----
-
-## 📌 Abstracciones y Principios de Diseño
-
-El proyecto sigue una arquitectura basada en **Clean Architecture** y **Feature-Based Architecture**, combinada con **MVVM** (Model-View-ViewModel) para separar la lógica de presentación de la lógica de negocio.
-
-### 🔹 Configuración Centralizada con el ConfigAdapter
-- Se usa el patrón **Singleton** para garantizar que la configuración sea única en toda la aplicación.
-- **Carga de Configuración Dinámica**: Obtiene valores desde `.env` o `app.json`.
-- **Uso del prefijo `EXPO_PUBLIC_`**: Todas las variables de entorno se acceden usando este prefijo, en conformidad con las prácticas de Expo Bare Workflow.
-- **Validación Automática**: Si falta una clave esencial, se lanza una advertencia.
-- **Fácil Extensibilidad**: Se pueden agregar nuevas claves de configuración sin modificar la estructura base.
+Esta sección explica cómo configurar y utilizar variables de entorno en Expo para gestionar la configuración de tu aplicación de manera dinámica según el entorno (desarrollo, producción, etc.).
 
 ---
 
-## 📺 Estructura de Configuración
+## 📌 ¿Qué son las Variables de Entorno?
 
-📌 **Ubicación:** `src/core/config/environment/`
+Las variables de entorno son valores de configuración que puedes usar dentro de tu aplicación sin necesidad de codificarlos directamente en el código fuente. En Expo, te permiten gestionar la configuración de tu aplicación de manera dinámica, dependiendo del entorno (por ejemplo, desarrollo, producción, etc.).
 
-📁 **Archivos Claves:**
-- `ConfigAdapter.ts` → Implementa la carga y validación de configuración.
-- `EnvConfig.ts` → Punto de acceso central para recuperar configuraciones.
+---
 
-Ejemplo de acceso a la configuración en la aplicación:
+## 📍 Tipos de Variables en Expo
+
+### 🔹 **Variables Públicas**
+Estas son accesibles desde el frontend de la aplicación (en el código JavaScript) y, por lo tanto, no deben contener información sensible. Se definen en el campo `extra` de tu archivo `app.config.js` o `app.json`.
+
+### 🔹 **Variables Privadas**
+Las variables privadas están destinadas a configuraciones sensibles (como claves secretas o credenciales de acceso) y no deben ser accesibles desde el frontend. Deben usarse solo en el backend o en builds nativos para garantizar la seguridad.
+
+---
+
+## 📝 Uso de Variables de Entorno en Expo
+
+### Paso 1: Definir Variables en `app.config.js`
+
+En Expo, las variables de entorno se definen dentro del campo `extra` de `app.config.js`. Este archivo es utilizado para la configuración de tu aplicación.
+
+#### Ejemplo de `app.config.js`:
+
+```javascript
+export default {
+  name: 'rn-clean-feature-mvvm-template',
+  slug: 'rn-clean-feature-mvvm-template',
+  version: '1.0.0',
+  extra: {
+    EXPO_PUBLIC_API_URL: process.env.EXPO_PUBLIC_API_URL || 'https://api.example.com',
+    EXPO_PUBLIC_ENV: process.env.EXPO_PUBLIC_ENV || 'development',
+    EXPO_PUBLIC_STATE_ADAPTER: process.env.EXPO_PUBLIC_STATE_ADAPTER || 'redux',
+    EXPO_PUBLIC_ENABLE_NEW_AUTH_FLOW: process.env.EXPO_PUBLIC_ENABLE_NEW_AUTH_FLOW || 'true',
+    EXPO_PUBLIC_ENABLE_ADVANCED_ANALYTICS: process.env.EXPO_PUBLIC_ENABLE_ADVANCED_ANALYTICS || 'true',
+    EXPO_PUBLIC_DB_NAME: process.env.EXPO_PUBLIC_DB_NAME || 'example_rncfm.db',
+    EXPO_PRIVATE_SECRET_KEY: process.env.EXPO_PRIVATE_SECRET_KEY || 'default_secret_key',
+  },
+};
+```
+
+### Paso 2: Acceder a las Variables en el Código
+
+Dentro de tu código, puedes acceder a estas variables utilizando `Constants.manifest.extra`.
+
+#### Ejemplo de uso en `ConfigAdapter.ts`:
+
 ```typescript
-import { Config } from '@core/config/environment/EnvConfig';
-console.log(Config.get('API_URL'));
-```
+import Constants from 'expo-constants';
 
----
+export class ConfigAdapter {
+  private static instance: ConfigAdapter;
+  private config: Record<string, any> = {};
 
-## 📆 Agregando Nuevas Funcionalidades
+  private constructor() {
+    this.loadConfig();
+  }
 
-El sistema de configuración permite agregar nuevas fuentes de datos de manera sencilla. Ejemplos:
-- 🔹 **Integrar Firebase Remote Config** para ajustar configuraciones sin actualizar la app.
-- 🔹 **Usar SQLite/MMKV** para persistir valores de configuración localmente.
-- 🔹 **Extender ConfigAdapter** para incluir preferencias de usuario dinámicas.
+  public static getInstance(): ConfigAdapter {
+    if (!ConfigAdapter.instance) {
+      ConfigAdapter.instance = new ConfigAdapter();
+    }
+    return ConfigAdapter.instance;
+  }
 
----
+  private loadConfig() {
+    const defaultConfig = {
+      API_URL: 'https://fallback-url.com',
+      ENV: 'development',
+      APP_NAME: 'MyApp',
+      VERSION: '1.0.0',
+      SECRET_KEY: 'default_secret_key',
+      STATE_ADAPTER: 'redux',
+      ENABLE_NEW_AUTH_FLOW: false,
+      ENABLE_ADVANCED_ANALYTICS: false,
+    };
 
-## 🏧 Buenas Prácticas Aplicadas y Futuras
+    const expoConfig = Constants.expoConfig?.extra || {};
+    this.config = { ...defaultConfig, ...expoConfig };
+  }
 
-- ✅ **Principio de Única Responsabilidad (SRP)**: Cada módulo de configuración tiene una función clara y separada.
-- ✅ **Desacoplamiento**: Se evita que la lógica de negocio dependa directamente de variables de entorno.
-- ✅ **Extensibilidad**: Se puede ampliar sin modificar la estructura principal.
-
-🚀 **Futuras Mejores Prácticas**:
-- Implementar un **cache layer** para mejorar rendimiento.
-- Agregar soporte para múltiples entornos en tiempo de ejecución.
-- Incorporar validaciones avanzadas y fallback automático para configuraciones críticas.
-
-Con esta estructura, el proyecto se mantiene flexible y escalable, asegurando una mejor organización y control sobre la configuración global de la aplicación.
-
-## Ejemplo de Uso
-
-En el archivo `App.tsx`:
-
-```ts
-import React from 'react';
-import { Text, View } from 'react-native';
-import { Config } from '@core/config/environment/EnvConfig';
-
-export default function App() {
-  const apiUrl = Config.get<string>('API_URL');
-  return (
-    <View>
-      <Text>Base URL: {apiUrl}</Text>
-    </View>
-  );
+  public get<T = any>(key: string): T {
+    return this.config[key] as T;
+  }
 }
+
+export const Config = ConfigAdapter.getInstance();
 ```
+
+### Paso 3: Configuración en `.env` para Diferentes Entornos
+
+Puedes usar archivos `.env` para gestionar configuraciones diferentes según el entorno (desarrollo, producción, staging, etc.).
+
+#### Ejemplo de archivo `.env.development`:
+
+```ini
+EXPO_PUBLIC_API_URL=https://api.development.com
+EXPO_PUBLIC_ENV=development
+EXPO_PUBLIC_STATE_ADAPTER=redux
+EXPO_PUBLIC_ENABLE_NEW_AUTH_FLOW=true
+EXPO_PUBLIC_ENABLE_ADVANCED_ANALYTICS=true
+EXPO_PUBLIC_DB_NAME=example_rncfm.db
+EXPO_PRIVATE_SECRET_KEY=dev_secret_key
+```
+
+### Paso 4: Acceder a las Variables en el Código
+
+En tu aplicación, puedes acceder a estas variables de entorno usando `Config.get`.
+
+#### Ejemplo:
+
+```typescript
+const apiUrl = Config.get<string>('API_URL');
+console.log('API URL:', apiUrl);  // Output: https://api.development.com
+```
+
+---
+
+## 🛠 Mejoras y Buenas Prácticas
+
+### 🔒 Seguridad con Variables Privadas
+No expongas claves sensibles (como claves de API o contraseñas) en el frontend. Utiliza variables privadas solo en el backend o en el contexto de builds nativos para mantener la seguridad de la aplicación.
+
+### 🌍 Gestión de Entornos
+Usa diferentes archivos `.env` para cada entorno, como `.env.production` o `.env.staging`, para gestionar configuraciones específicas y asegurarte de que cada entorno tiene su propia configuración independiente.
+
+### ⚙️ Evitar el Uso Excesivo de Variables de Entorno
+No uses variables de entorno para valores que no cambian entre entornos (por ejemplo, el nombre de la aplicación). Esto mantiene tu código más limpio y fácil de mantener.
+
+### 🔄 Refactorización de Configuración
+Si tienes muchas variables de entorno, organiza tu configuración en un archivo separado que contenga todos los valores predeterminados y un método para cargarlos de forma centralizada.
