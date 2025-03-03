@@ -22,13 +22,15 @@ import { initApp } from '@core/config/initApp';
 import { ThemeProvider, useTheme } from '@core/config/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import { useNetworkStatus } from '@common/hooks';
+import { AuthViewModel } from '@presentation/features/auth/viewModel/AuthViewModel';
 
 const AppContent = () => {
   const { t } = useTranslation();
   const { screenReaderEnabled } = useA11yContext();
   const { theme, toggleTheme } = useTheme();
-
   const { isConnected, connectionType } = useNetworkStatus();
+  const [userMessage, setUserMessage] = useState('');
+  const authViewModel = new AuthViewModel();
 
   const testEncryption = () => {
     try {
@@ -45,6 +47,26 @@ const AppContent = () => {
       );
     } catch (error) {
       console.error('Error en encriptación', error);
+    }
+  };
+
+  const testUserCreation = async () => {
+    try {
+      setUserMessage('Creando usuario...');
+      // Uso del ViewModel para registrar usuario
+      const newUser = await authViewModel.registerUser({
+        username: `user_${Date.now()}`,
+        password: 'password123',
+        firstName: 'John',
+        lastName: 'Doe',
+      });
+      setUserMessage(
+        `Usuario creado con ID: ${
+          newUser.id
+        }\nNombre: ${newUser.getFullName()}`,
+      );
+    } catch (error: any) {
+      setUserMessage(`Error: ${error.message}`);
     }
   };
 
@@ -82,6 +104,16 @@ const AppContent = () => {
         onPress={toggleTheme}
         color={theme.colors.secondary}
       />
+      <Button
+        title="Test User Creation"
+        onPress={testUserCreation}
+        color={theme.colors.primary}
+      />
+      {userMessage ? (
+        <Text style={[styles.userMessage, { color: theme.colors.text }]}>
+          {userMessage}
+        </Text>
+      ) : null}
     </View>
   );
 };
@@ -152,6 +184,14 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 16,
     marginTop: 10,
+  },
+  userMessage: {
+    marginTop: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    width: '90%',
   },
 });
 

@@ -8,6 +8,7 @@ import { getStateAdapter } from '@core/state/adapters';
 import { IStateAdapter } from '@core/state/interfaces/IStateAdapter';
 import { RootState } from '@core/state/redux/store';
 import { EncryptionService } from '@core/security/EncryptionService';
+import '@core/di/dependencyContainer';
 
 /**
  * Inicializa la aplicación: configura telemetría, logging, encriptación y el estado global.

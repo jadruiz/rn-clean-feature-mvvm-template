@@ -13,6 +13,8 @@
     "skipLibCheck": true, // Evita revisar las definiciones de tipos en node_modules
     "resolveJsonModule": true, // Permite importar archivos JSON
     "strict": true, // Habilita todas las reglas estrictas de TypeScript
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "baseUrl": "./src", // Define la base para los imports relativos
     "paths": {
       // Alias para importaciones más limpias
