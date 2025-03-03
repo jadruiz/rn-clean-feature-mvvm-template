@@ -20,8 +20,8 @@ export class ConfigAdapter {
   }
 
   private loadConfig() {
-    // Configuración por defecto
-    const defaultConfig = {
+    // Valores por defecto sin prefijos
+    const defaultConfig: Record<string, any> = {
       API_URL: 'https://fallback-url.com',
       ENV: 'development',
       APP_NAME: 'MyApp',
@@ -31,36 +31,37 @@ export class ConfigAdapter {
       ENABLE_NEW_AUTH_FLOW: false,
       ENABLE_ADVANCED_ANALYTICS: false,
     };
-
-    // Cargar configuración desde expoConfig
+  
     const expoConfig = Constants.expoConfig?.extra || {};
-
-    // Centralizamos la carga de la configuración con valores predeterminados
-    this.config = this.mergeConfigWithDefaults(expoConfig, defaultConfig);
-
+    console.log('🚀 expoConfig.extra:', expoConfig);
+  
+    // Mapea las claves públicas y privadas a tus claves internas
+    const mappedConfig: Record<string, any> = {
+      API_URL: expoConfig.EXPO_PUBLIC_API_URL || defaultConfig.API_URL,
+      ENV: expoConfig.EXPO_PUBLIC_ENV || defaultConfig.ENV,
+      APP_NAME: expoConfig.EXPO_PUBLIC_APP_NAME || defaultConfig.APP_NAME,
+      VERSION: expoConfig.EXPO_PUBLIC_VERSION || defaultConfig.VERSION,
+      SECRET_KEY: expoConfig.EXPO_PRIVATE_SECRET_KEY || defaultConfig.SECRET_KEY,
+      STATE_ADAPTER:
+        expoConfig.EXPO_PUBLIC_STATE_ADAPTER || defaultConfig.STATE_ADAPTER,
+      ENABLE_NEW_AUTH_FLOW:
+        expoConfig.EXPO_PUBLIC_ENABLE_NEW_AUTH_FLOW !== undefined
+          ? expoConfig.EXPO_PUBLIC_ENABLE_NEW_AUTH_FLOW
+          : defaultConfig.ENABLE_NEW_AUTH_FLOW,
+      ENABLE_ADVANCED_ANALYTICS:
+        expoConfig.EXPO_PUBLIC_ENABLE_ADVANCED_ANALYTICS !== undefined
+          ? expoConfig.EXPO_PUBLIC_ENABLE_ADVANCED_ANALYTICS
+          : defaultConfig.ENABLE_ADVANCED_ANALYTICS
+    };
+  
+    this.config = mappedConfig;
+  
     logger.info('📢 Configuración cargada correctamente.', {
       config: this.config,
     });
-
+  
     this.validateConfig();
-  }
-
-  /**
-   * Combina la configuración del manifiesto de Expo con los valores predeterminados.
-   * @param {Record<string, any>} config - Configuración cargada desde Expo
-   * @param {Record<string, any>} defaultConfig - Valores predeterminados para cada clave
-   * @returns {Record<string, any>} Configuración final combinada
-   */
-  private mergeConfigWithDefaults(
-    config: Record<string, any>,
-    defaultConfig: Record<string, any>,
-  ) {
-    return Object.keys(defaultConfig).reduce((acc, key) => {
-      // Si la configuración tiene la clave, usa el valor; de lo contrario, usa el valor predeterminado
-      acc[key] = config[key] !== undefined ? config[key] : defaultConfig[key];
-      return acc;
-    }, {} as Record<string, any>);
-  }
+  }  
 
   public get<T = any>(key: string): T {
     if (this.config[key] !== undefined) {
