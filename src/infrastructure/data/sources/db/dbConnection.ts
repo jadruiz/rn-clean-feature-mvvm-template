@@ -5,6 +5,7 @@ import { users } from '@infrastructure/storage/schemas/users';
 import { Logger, consoleAdapter, LogLevel } from '@core/logging';
 import { Schema } from '@infrastructure/storage/Database';
 import * as SQLiteModule from 'expo-sqlite';
+import { Config } from '@core/config/environment/EnvConfig';
 
 const logger = new Logger(consoleAdapter, LogLevel.INFO);
 
@@ -25,8 +26,7 @@ export class DatabaseConnection {
   public async initialize(): Promise<void> {
     try {
       logger.info('Initializing database connection');
-      // Usar openDatabaseSync desde expo-sqlite
-      this.db = SQLiteModule.openDatabaseSync('appDatabase.db');
+      this.db = SQLiteModule.openDatabaseSync(Config.get('DB_NAME'));
       this.drizzleDB = drizzle<Schema>(this.db, { schema: { users } });
       logger.info('Database connection initialized successfully');
     } catch (error) {

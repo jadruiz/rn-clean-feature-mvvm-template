@@ -4,6 +4,7 @@ import { drizzle, ExpoSQLiteDatabase } from 'drizzle-orm/expo-sqlite';
 import { Logger, consoleAdapter, LogLevel } from '@core/logging';
 import { users } from './schemas/users';
 import { initialMigration } from './migrations/initialMigration';
+import { Config } from '@core/config/environment/EnvConfig';
 
 const logger = new Logger(consoleAdapter, LogLevel.INFO);
 
@@ -36,9 +37,7 @@ export const initializeDatabase =
   async (): Promise<ExpoSQLiteDatabase<Schema> | null> => {
     try {
       logger.info('📦 Inicializando base de datos...');
-
-      // ✅ Corrección: Usamos `openDatabaseSync()` en lugar de `openDatabase()`
-      const db = SQLite.openDatabaseSync('app.db');
+      const db = SQLite.openDatabaseSync(Config.get('DB_NAME'));
       const drizzleClient = drizzle<Schema>(db, { schema: { users } });
 
       // 🔹 Verificar si la tabla "users" ya existe
