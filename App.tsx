@@ -1,5 +1,4 @@
 // App.jsx
-import 'reflect-metadata';
 import 'react-native-get-random-values';
 import React, { useEffect, useState } from 'react';
 import {
@@ -18,10 +17,11 @@ import { EncryptionService } from '@core/security/EncryptionService';
 import { AccessibilityHelper } from '@core/a11y/AccessibilityHelper';
 import { A11yProvider, useA11yContext } from '@core/a11y/A11yContext';
 import GlobalErrorBoundary from '@presentation/components/GlobalErrorBoundary';
-import { initApp } from '@core/config/initApp';
+import {initApp} from '@core/config/initApp';
 import { ThemeProvider, useTheme } from '@core/config/theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import { useNetworkStatus } from '@common/hooks';
+import { container } from 'tsyringe';
 import { AuthViewModel } from '@presentation/features/auth/viewModel/AuthViewModel';
 
 const AppContent = () => {
@@ -30,7 +30,9 @@ const AppContent = () => {
   const { theme, toggleTheme } = useTheme();
   const { isConnected, connectionType } = useNetworkStatus();
   const [userMessage, setUserMessage] = useState('');
-  const authViewModel = new AuthViewModel();
+
+  // Resolver AuthViewModel desde el contenedor DI
+  const authViewModel = container.resolve(AuthViewModel);
 
   const testEncryption = () => {
     try {
@@ -61,9 +63,7 @@ const AppContent = () => {
         lastName: 'Doe',
       });
       setUserMessage(
-        `Usuario creado con ID: ${
-          newUser.id
-        }\nNombre: ${newUser.getFullName()}`,
+        `Usuario creado con ID: ${newUser.id}\nNombre: ${newUser.getFullName()}`,
       );
     } catch (error: any) {
       setUserMessage(`Error: ${error.message}`);
@@ -71,15 +71,11 @@ const AppContent = () => {
   };
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-    >
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Text style={[styles.text, { color: theme.colors.text }]}>
         API URL: {Config.get('API_URL')}
       </Text>
-      <Text
-        style={[styles.networkText, { color: isConnected ? 'green' : 'red' }]}
-      >
+      <Text style={[styles.networkText, { color: isConnected ? 'green' : 'red' }]}>
         {isConnected ? '🟢 Conectado' : '🔴 Sin conexión'}
       </Text>
       <Text style={[styles.networkType, { color: theme.colors.primary }]}>

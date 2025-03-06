@@ -1,5 +1,5 @@
 // src/domain/entities/User.ts
-export type UserStatus = 'active' | 'inactive' | 'suspended' | 'pending_verification';
+export type UserStatus = 'pending_verification' | 'active' | 'inactive';
 
 export interface NewUserData {
   username: string;
@@ -7,10 +7,9 @@ export interface NewUserData {
   firstName: string;
   lastName: string;
   maternalName?: string;
-  status: UserStatus;
 }
 
-export class User {
+export class UserEntity {
   id: string;
   username: string;
   password: string;
@@ -18,11 +17,11 @@ export class User {
   lastName: string;
   maternalName?: string;
   status: UserStatus;
-  createdAt: Date;
-  updatedAt: Date;
-  lastLoginAt?: Date;
+  createdAt: number;
+  updatedAt: number;
+  lastLoginAt?: number;
 
-  constructor(params: {
+  constructor(data: {
     id: string;
     username: string;
     password: string;
@@ -30,33 +29,23 @@ export class User {
     lastName: string;
     maternalName?: string;
     status: UserStatus;
-    createdAt: Date;
-    updatedAt: Date;
-    lastLoginAt?: Date;
+    createdAt: number;
+    updatedAt: number;
+    lastLoginAt?: number;
   }) {
-    this.id = params.id;
-    this.username = params.username;
-    this.password = params.password;
-    this.firstName = params.firstName;
-    this.lastName = params.lastName;
-    this.maternalName = params.maternalName;
-    this.status = params.status;
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
-    this.lastLoginAt = params.lastLoginAt;
+    this.id = data.id;
+    this.username = data.username;
+    this.password = data.password;
+    this.firstName = data.firstName;
+    this.lastName = data.lastName;
+    this.maternalName = data.maternalName;
+    this.status = data.status;
+    this.createdAt = data.createdAt;
+    this.updatedAt = data.updatedAt;
+    this.lastLoginAt = data.lastLoginAt;
   }
 
-  /**
-   * Devuelve el nombre completo del usuario.
-   */
   getFullName(): string {
-    return `${this.firstName} ${this.lastName}${this.maternalName ? ` ${this.maternalName}` : ''}`;
-  }
-
-  /**
-   * Indica si la cuenta está activa.
-   */
-  isActive(): boolean {
-    return this.status === 'active';
+    return `${this.firstName} ${this.lastName}`;
   }
 }

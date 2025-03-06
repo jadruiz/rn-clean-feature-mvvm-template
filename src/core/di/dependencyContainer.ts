@@ -6,8 +6,12 @@ import { container } from 'tsyringe';
 import { AuthService } from '@core/security/AuthService';
 import { EncryptionService } from '@core/security/EncryptionService';
 import { KeychainService } from '@core/security/KeychainService';
-import { initializeDatabase } from '@infrastructure/storage/Database';
-import { DrizzleUserRepository } from '@infrastructure/data/repositories/DrizzleUserRepository';
+
+// Importar la instancia de la base de datos WatermelonDB
+import { database } from '@infrastructure/storage/Database';
+
+// Importar el repositorio de usuario actualizado (WatermelonUserRepository)
+import WatermelonUserRepository from '@infrastructure/data/repositories/WatermelonUserRepository';
 import { IUserRepository } from '@domain/repositories/IUserRepository';
 
 // Registro de servicios
@@ -24,14 +28,13 @@ import { RootState } from '@core/state/redux/store';
 container.register<IStateAdapter<RootState>>('ReduxAdapter', { useClass: ReduxAdapter });
 container.register<IStateAdapter<RootState>>('MemoryAdapter', { useClass: MemoryAdapter });
 
-// Inicializar base de datos y registrarla en el contenedor DI
-const dbClient = initializeDatabase();
-if (!dbClient) {
+// Verificar e inyectar la instancia de la base de datos en el contenedor DI
+if (!database) {
   throw new Error('❌ No se pudo inicializar la base de datos');
 }
-container.registerInstance('DatabaseClient', dbClient);
+container.registerInstance('DatabaseClient', database);
 
-// Registrar el repositorio de usuarios
-container.register<IUserRepository>('IUserRepository', { useClass: DrizzleUserRepository });
+// Registrar el repositorio de usuarios utilizando la implementación de WatermelonDB
+container.register<IUserRepository>('IUserRepository', { useClass: WatermelonUserRepository });
 
 export { container };

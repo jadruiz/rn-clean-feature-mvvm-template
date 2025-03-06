@@ -1,40 +1,32 @@
 // src/presentation/features/auth/viewModel/AuthViewModel.ts
-import { RepositoryFactory } from '@infrastructure/data/factories/RepositoryFactory';
+import { injectable, inject } from 'tsyringe';
 import { CreateUserUseCase } from '@domain/useCases/user/CreateUserUseCase';
-import { AuthenticateUserUseCase } from '@domain/useCases/user/AuthenticateUserUseCase';
-import { User } from '@domain/entities/User';
+import { GetUserByIdUseCase } from '@domain/useCases/user/GetUserByIdUseCase';
+import { UpdateUserStatusUseCase } from '@domain/useCases/user/UpdateUserStatusUseCase';
+import { IUserRepository } from '@domain/repositories/IUserRepository';
+import { NewUserData, UserStatus } from '@domain/entities/User';
 
+@injectable()
 export class AuthViewModel {
-  private createUserUseCase!: CreateUserUseCase;
-  private authenticateUserUseCase!: AuthenticateUserUseCase;
+  private createUserUseCase: CreateUserUseCase;
+  private getUserByIdUseCase: GetUserByIdUseCase;
+  private updateUserStatusUseCase: UpdateUserStatusUseCase;
 
-  constructor() {
-    this.init();
-  }
-
-  private async init() {
-    const userRepository = await RepositoryFactory.createUserRepository();
+  constructor(@inject('IUserRepository') userRepository: IUserRepository) {
     this.createUserUseCase = new CreateUserUseCase(userRepository);
-    this.authenticateUserUseCase = new AuthenticateUserUseCase(userRepository);
+    this.getUserByIdUseCase = new GetUserByIdUseCase(userRepository);
+    this.updateUserStatusUseCase = new UpdateUserStatusUseCase(userRepository);
   }
 
-  async registerUser(userData: {
-    username: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    maternalName?: string;
-  }): Promise<User> {
-    if (!this.createUserUseCase) {
-      await this.init();
-    }
-    return this.createUserUseCase.execute(userData);
+  async registerUser(userData: NewUserData) {
+    return await this.createUserUseCase.execute(userData);
   }
 
-  async login(username: string, password: string): Promise<User | null> {
-    if (!this.authenticateUserUseCase) {
-      await this.init();
-    }
-    return this.authenticateUserUseCase.execute(username, password);
+  async getUserById(id: string) {
+    return await this.getUserByIdUseCase.execute(id);
+  }
+
+  async updateUserStatus(id: string, status: UserStatus) {
+    return await this.updateUserStatusUseCase.execute(id, status);
   }
 }

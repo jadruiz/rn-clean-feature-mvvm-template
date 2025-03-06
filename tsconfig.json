@@ -15,6 +15,7 @@
     "strict": true, // Habilita todas las reglas estrictas de TypeScript
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false,
     "baseUrl": "./src", // Define la base para los imports relativos
     "paths": {
       // Alias para importaciones más limpias
